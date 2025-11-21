@@ -4299,11 +4299,13 @@ section {
 /* Navbar Position Classes */
 .navbar-top {
     top: 0;
+    margin: 20px;
     bottom: auto;
 }
 
 .navbar-bottom {
     top: auto;
+    margin: 20px;
     bottom: 0;
 }
 
@@ -4319,11 +4321,11 @@ section {
 
 /* Adjust main content padding based on navbar position */
 .navbar-top ~ main {
-    padding-top: 80px;
+    padding-top: 120px;
 }
 
 .navbar-bottom ~ main {
-    padding-bottom: 80px;
+    padding-bottom: 120px;
 }
 
 .navbar-hidden ~ main {
