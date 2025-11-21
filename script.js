@@ -1,5 +1,5 @@
-// Peningkatan StudyFocusApp dengan fitur baru
-class EnhancedStudyFocusApp {
+// studyfocus-app.js - Enhanced StudyFocus App dengan fitur responsif dan navbar fleksibel
+class StudyFocusApp {
     constructor() {
         this.todos = [];
         this.pomodoroStats = {
@@ -11,19 +11,8 @@ class EnhancedStudyFocusApp {
         };
         this.quickNotes = '';
         this.currentTheme = 'light';
-        this.isFullscreen = false;
-        this.user = null;
-        
-        // Pomodoro Timer
-        this.timer = {
-            minutes: 25,
-            seconds: 0,
-            isRunning: false,
-            mode: 'focus',
-            interval: null,
-            completedSessions: 0
-        };
-        
+        this.navbarPosition = 'top'; // 'top' or 'bottom'
+        this.navbarVisible = true;
         this.currentPage = window.location.pathname.split('/').pop() || 'index.html';
         this.init();
     }
@@ -33,6 +22,7 @@ class EnhancedStudyFocusApp {
         this.setupEventListeners();
         this.setupNavigation();
         this.applyTheme();
+        this.applyNavbarSettings();
         this.setupPWA();
         
         // Page-specific initialization
@@ -110,34 +100,379 @@ class EnhancedStudyFocusApp {
         });
     }
     
-    // Fullscreen functionality
-    toggleFullscreen() {
-        if (!document.fullscreenElement) {
-            document.documentElement.requestFullscreen().catch(err => {
-                console.log(`Error attempting to enable fullscreen: ${err.message}`);
+    // Navbar Controls
+    setupNavigation() {
+        // Highlight current page in navigation
+        const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+        document.querySelectorAll('.nav-link, .floating-nav-link').forEach(link => {
+            if (link.getAttribute('href') === currentPage) {
+                link.classList.add('active');
+            } else {
+                link.classList.remove('active');
+            }
+        });
+        
+        // Mobile menu toggle
+        const navToggle = document.getElementById('navToggle');
+        const navMenu = document.getElementById('navMenu');
+        const floatingNavToggle = document.getElementById('floatingNavToggle');
+        const floatingNavMenu = document.getElementById('floatingNavMenu');
+        
+        if (navToggle && navMenu) {
+            navToggle.addEventListener('click', () => {
+                navMenu.classList.toggle('active');
+                navToggle.classList.toggle('active');
             });
-            this.isFullscreen = true;
-        } else {
-            if (document.exitFullscreen) {
-                document.exitFullscreen();
-                this.isFullscreen = false;
+        }
+        
+        if (floatingNavToggle && floatingNavMenu) {
+            floatingNavToggle.addEventListener('click', () => {
+                floatingNavMenu.classList.toggle('active');
+                floatingNavToggle.classList.toggle('active');
+            });
+        }
+        
+        // Close mobile menu when clicking on a link
+        document.querySelectorAll('.nav-link, .floating-nav-link').forEach(link => {
+            link.addEventListener('click', () => {
+                if (navMenu) navMenu.classList.remove('active');
+                if (navToggle) navToggle.classList.remove('active');
+                if (floatingNavMenu) floatingNavMenu.classList.remove('active');
+                if (floatingNavToggle) floatingNavToggle.classList.remove('active');
+            });
+        });
+        
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', (e) => {
+            if (navMenu && navToggle && !navToggle.contains(e.target) && !navMenu.contains(e.target)) {
+                navMenu.classList.remove('active');
+                navToggle.classList.remove('active');
+            }
+            
+            if (floatingNavMenu && floatingNavToggle && !floatingNavToggle.contains(e.target) && !floatingNavMenu.contains(e.target)) {
+                floatingNavMenu.classList.remove('active');
+                floatingNavToggle.classList.remove('active');
+            }
+        });
+    }
+    
+    // Navbar Position and Visibility Controls
+    setupNavbarControls() {
+        // Create navbar controls if they don't exist
+        if (!document.getElementById('navbarControls')) {
+            const controls = document.createElement('div');
+            controls.id = 'navbarControls';
+            controls.className = 'navbar-controls';
+            controls.innerHTML = `
+                <button id="toggleNavbarPosition" class="navbar-control-btn" title="Pindah Posisi Navbar">
+                    <i class="fas fa-arrows-alt-v"></i>
+                </button>
+                <button id="toggleNavbarVisibility" class="navbar-control-btn" title="Sembunyikan/Tampilkan Navbar">
+                    <i class="fas fa-eye"></i>
+                </button>
+            `;
+            
+            // Add to navbar actions or create a new container
+            const navActions = document.querySelector('.nav-actions') || document.querySelector('.floating-nav-actions');
+            if (navActions) {
+                navActions.appendChild(controls);
+            } else {
+                document.body.appendChild(controls);
+            }
+            
+            // Add event listeners
+            document.getElementById('toggleNavbarPosition').addEventListener('click', () => {
+                this.toggleNavbarPosition();
+            });
+            
+            document.getElementById('toggleNavbarVisibility').addEventListener('click', () => {
+                this.toggleNavbarVisibility();
+            });
+        }
+    }
+    
+    toggleNavbarPosition() {
+        this.navbarPosition = this.navbarPosition === 'top' ? 'bottom' : 'top';
+        localStorage.setItem('navbarPosition', this.navbarPosition);
+        this.applyNavbarSettings();
+        this.showNotification(`Navbar dipindah ke ${this.navbarPosition === 'top' ? 'atas' : 'bawah'}`, 'info');
+    }
+    
+    toggleNavbarVisibility() {
+        this.navbarVisible = !this.navbarVisible;
+        localStorage.setItem('navbarVisible', this.navbarVisible);
+        this.applyNavbarSettings();
+        this.showNotification(`Navbar ${this.navbarVisible ? 'ditampilkan' : 'disembunyikan'}`, 'info');
+    }
+    
+    applyNavbarSettings() {
+        const navbars = document.querySelectorAll('.navbar, .floating-navbar');
+        
+        navbars.forEach(navbar => {
+            // Apply position
+            navbar.classList.remove('navbar-top', 'navbar-bottom');
+            navbar.classList.add(`navbar-${this.navbarPosition}`);
+            
+            // Apply visibility
+            if (this.navbarVisible) {
+                navbar.classList.remove('navbar-hidden');
+            } else {
+                navbar.classList.add('navbar-hidden');
+            }
+        });
+        
+        // Update main content padding based on navbar position and visibility
+        this.adjustContentPadding();
+        
+        // Update control button icons
+        const positionBtn = document.getElementById('toggleNavbarPosition');
+        const visibilityBtn = document.getElementById('toggleNavbarVisibility');
+        
+        if (positionBtn) {
+            const icon = positionBtn.querySelector('i');
+            if (icon) {
+                icon.className = this.navbarPosition === 'top' ? 'fas fa-arrow-down' : 'fas fa-arrow-up';
             }
         }
         
-        this.updateFullscreenButton();
-    }
-    
-    updateFullscreenButton() {
-        const fullscreenBtn = document.getElementById('fullscreenToggle');
-        if (fullscreenBtn) {
-            const icon = fullscreenBtn.querySelector('i');
+        if (visibilityBtn) {
+            const icon = visibilityBtn.querySelector('i');
             if (icon) {
-                icon.className = this.isFullscreen ? 'fas fa-compress' : 'fas fa-expand';
+                icon.className = this.navbarVisible ? 'fas fa-eye-slash' : 'fas fa-eye';
             }
         }
     }
     
-    // Home page initialization
+    adjustContentPadding() {
+        const mainContent = document.querySelector('main');
+        if (!mainContent) return;
+        
+        // Reset padding
+        mainContent.style.paddingTop = '';
+        mainContent.style.paddingBottom = '';
+        
+        if (this.navbarVisible) {
+            if (this.navbarPosition === 'top') {
+                mainContent.style.paddingTop = '80px';
+            } else {
+                mainContent.style.paddingBottom = '80px';
+            }
+        }
+    }
+    
+    // Theme functionality
+    setupEventListeners() {
+        // Theme toggle
+        const themeToggle = document.getElementById('themeToggle');
+        const floatingThemeToggle = document.getElementById('floatingThemeToggle');
+        
+        if (themeToggle) {
+            themeToggle.addEventListener('click', () => {
+                this.toggleTheme();
+            });
+        }
+        
+        if (floatingThemeToggle) {
+            floatingThemeToggle.addEventListener('click', () => {
+                this.toggleTheme();
+            });
+        }
+        
+        // Navbar controls
+        this.setupNavbarControls();
+        
+        // Quick notes auto-save
+        const quickNotes = document.getElementById('quickNotes');
+        if (quickNotes) {
+            quickNotes.addEventListener('input', () => {
+                this.quickNotes = quickNotes.value;
+                this.saveQuickNotes();
+                
+                // Update character count
+                const notesCounter = document.querySelector('.notes-counter');
+                if (notesCounter) {
+                    notesCounter.textContent = `${this.quickNotes.length} karakter`;
+                }
+            });
+        }
+        
+        // Clear notes button
+        const clearNotes = document.getElementById('clearNotes');
+        if (clearNotes) {
+            clearNotes.addEventListener('click', () => {
+                if (confirm('Hapus semua catatan?')) {
+                    this.quickNotes = '';
+                    if (quickNotes) quickNotes.value = '';
+                    this.saveQuickNotes();
+                    
+                    const notesCounter = document.querySelector('.notes-counter');
+                    if (notesCounter) {
+                        notesCounter.textContent = '0 karakter';
+                    }
+                    
+                    this.showNotification('Catatan berhasil dihapus', 'success');
+                }
+            });
+        }
+        
+        // Window resize handler for responsiveness
+        window.addEventListener('resize', () => {
+            this.handleResize();
+        });
+        
+        // Initial resize handling
+        this.handleResize();
+    }
+    
+    handleResize() {
+        // Close mobile menus on resize to larger screens
+        if (window.innerWidth > 768) {
+            const navMenu = document.getElementById('navMenu');
+            const floatingNavMenu = document.getElementById('floatingNavMenu');
+            const navToggle = document.getElementById('navToggle');
+            const floatingNavToggle = document.getElementById('floatingNavToggle');
+            
+            if (navMenu) navMenu.classList.remove('active');
+            if (floatingNavMenu) floatingNavMenu.classList.remove('active');
+            if (navToggle) navToggle.classList.remove('active');
+            if (floatingNavToggle) floatingNavToggle.classList.remove('active');
+        }
+    }
+    
+    toggleTheme() {
+        this.currentTheme = this.currentTheme === 'light' ? 'dark' : 'light';
+        document.documentElement.setAttribute('data-theme', this.currentTheme);
+        localStorage.setItem('studyFocusTheme', this.currentTheme);
+        
+        // Update theme button icons
+        const themeBtns = document.querySelectorAll('#themeToggle, #floatingThemeToggle');
+        themeBtns.forEach(btn => {
+            if (btn) {
+                const icon = btn.querySelector('i');
+                if (icon) {
+                    icon.className = this.currentTheme === 'light' ? 'fas fa-moon' : 'fas fa-sun';
+                }
+            }
+        });
+        
+        this.showNotification(`Mode ${this.currentTheme === 'light' ? 'terang' : 'gelap'} diaktifkan`, 'info');
+    }
+    
+    applyTheme() {
+        document.documentElement.setAttribute('data-theme', this.currentTheme);
+        
+        // Update theme button icons
+        const themeBtns = document.querySelectorAll('#themeToggle, #floatingThemeToggle');
+        themeBtns.forEach(btn => {
+            if (btn) {
+                const icon = btn.querySelector('i');
+                if (icon) {
+                    icon.className = this.currentTheme === 'light' ? 'fas fa-moon' : 'fas fa-sun';
+                }
+            }
+        });
+    }
+    
+    // Data management
+    loadData() {
+        // Load theme
+        const savedTheme = localStorage.getItem('studyFocusTheme');
+        if (savedTheme) {
+            this.currentTheme = savedTheme;
+        }
+        
+        // Load navbar settings
+        const savedNavbarPosition = localStorage.getItem('navbarPosition');
+        if (savedNavbarPosition) {
+            this.navbarPosition = savedNavbarPosition;
+        }
+        
+        const savedNavbarVisible = localStorage.getItem('navbarVisible');
+        if (savedNavbarVisible !== null) {
+            this.navbarVisible = JSON.parse(savedNavbarVisible);
+        }
+        
+        // Load todos
+        const savedTodos = localStorage.getItem('studyFocusTodos');
+        if (savedTodos) {
+            this.todos = JSON.parse(savedTodos);
+        }
+        
+        // Load pomodoro stats
+        const savedStats = localStorage.getItem('studyFocusStats');
+        if (savedStats) {
+            const stats = JSON.parse(savedStats);
+            this.pomodoroStats = { ...this.pomodoroStats, ...stats };
+        }
+        
+        // Load quick notes
+        const savedNotes = localStorage.getItem('studyFocusNotes');
+        if (savedNotes) {
+            this.quickNotes = savedNotes;
+            const notesTextarea = document.getElementById('quickNotes');
+            if (notesTextarea) {
+                notesTextarea.value = this.quickNotes;
+                
+                // Update character count
+                const notesCounter = document.querySelector('.notes-counter');
+                if (notesCounter) {
+                    notesCounter.textContent = `${this.quickNotes.length} karakter`;
+                }
+            }
+        }
+    }
+    
+    saveTodos() {
+        localStorage.setItem('studyFocusTodos', JSON.stringify(this.todos));
+    }
+    
+    savePomodoroStats() {
+        localStorage.setItem('studyFocusStats', JSON.stringify(this.pomodoroStats));
+    }
+    
+    saveQuickNotes() {
+        localStorage.setItem('studyFocusNotes', this.quickNotes);
+    }
+    
+    // Notification system
+    showNotification(message, type = 'success', duration = 5000) {
+        // Remove existing notifications
+        document.querySelectorAll('.notification').forEach(notification => {
+            notification.remove();
+        });
+        
+        // Create new notification
+        const notification = document.createElement('div');
+        notification.className = `notification ${type}`;
+        notification.innerHTML = `
+            <div class="notification-content">
+                <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle'}"></i>
+                <p>${message}</p>
+            </div>
+            <button class="notification-close">
+                <i class="fas fa-times"></i>
+            </button>
+        `;
+        
+        document.body.appendChild(notification);
+        
+        // Add close functionality
+        const closeBtn = notification.querySelector('.notification-close');
+        if (closeBtn) {
+            closeBtn.addEventListener('click', () => {
+                notification.remove();
+            });
+        }
+        
+        // Remove notification after duration
+        setTimeout(() => {
+            if (notification.parentNode) {
+                notification.remove();
+            }
+        }, duration);
+    }
+    
+    // Page-specific initializations
     initHomePage() {
         // Demo tabs functionality
         const demoTabs = document.querySelectorAll('.demo-tab');
@@ -180,296 +515,278 @@ class EnhancedStudyFocusApp {
         });
     }
     
-    // Enhanced navigation with user state
-    setupNavigation() {
-        // Highlight current page in navigation
-        const currentPage = window.location.pathname.split('/').pop() || 'index.html';
-        document.querySelectorAll('.nav-link').forEach(link => {
-            if (link.getAttribute('href') === currentPage) {
-                link.classList.add('active');
-            } else {
-                link.classList.remove('active');
-            }
-        });
-        
-        // Mobile menu toggle
-        const navToggle = document.getElementById('navToggle');
-        const navMenu = document.getElementById('navMenu');
-        
-        if (navToggle && navMenu) {
-            navToggle.addEventListener('click', () => {
-                navMenu.classList.toggle('active');
-                navToggle.classList.toggle('active');
-            });
+    initPomodoroPage() {
+        // Initialize Pomodoro Timer if it exists
+        if (typeof PomodoroTimer !== 'undefined') {
+            window.pomodoroTimer = new PomodoroTimer();
         }
-        
-        // Close mobile menu when clicking on a link
-        document.querySelectorAll('.nav-link').forEach(link => {
-            link.addEventListener('click', () => {
-                navMenu.classList.remove('active');
-                navToggle.classList.remove('active');
-            });
-        });
-        
-        // Update user state in navigation
-        this.updateUserNavigation();
     }
     
-    updateUserNavigation() {
-        const navUser = document.getElementById('navUser');
-        const loginBtn = document.getElementById('loginBtn');
-        const registerBtn = document.getElementById('registerBtn');
-        
-        if (this.user) {
-            // User is logged in
-            if (navUser) {
-                navUser.innerHTML = `
-                    <div class="user-dropdown">
-                        <button class="user-btn">
-                            <img src="${this.user.avatar || 'https://i.pravatar.cc/100'}" alt="${this.user.name}">
-                            <span>${this.user.name}</span>
-                            <i class="fas fa-chevron-down"></i>
-                        </button>
-                        <div class="user-menu">
-                            <a href="profile.html" class="user-menu-item">
-                                <i class="fas fa-user"></i>
-                                <span>Profil</span>
-                            </a>
-                            <a href="settings.html" class="user-menu-item">
-                                <i class="fas fa-cog"></i>
-                                <span>Pengaturan</span>
-                            </a>
-                            <div class="user-menu-divider"></div>
-                            <a href="#" class="user-menu-item" id="logoutBtn">
-                                <i class="fas fa-sign-out-alt"></i>
-                                <span>Keluar</span>
-                            </a>
-                        </div>
-                    </div>
-                `;
-                
-                // Add logout functionality
-                const logoutBtn = document.getElementById('logoutBtn');
-                if (logoutBtn) {
-                    logoutBtn.addEventListener('click', (e) => {
-                        e.preventDefault();
-                        this.logout();
-                    });
-                }
-                
-                // User dropdown functionality
-                const userBtn = document.querySelector('.user-btn');
-                const userMenu = document.querySelector('.user-menu');
-                
-                if (userBtn && userMenu) {
-                    userBtn.addEventListener('click', () => {
-                        userMenu.classList.toggle('active');
-                    });
-                    
-                    // Close dropdown when clicking outside
-                    document.addEventListener('click', (e) => {
-                        if (!userBtn.contains(e.target) && !userMenu.contains(e.target)) {
-                            userMenu.classList.remove('active');
+    initTodoPage() {
+        // Initialize Todo List if it exists
+        if (typeof EnhancedTodoList !== 'undefined') {
+            window.todoApp = new EnhancedTodoList();
+        }
+    }
+    
+    initStatsPage() {
+        // Initialize charts if they exist
+        if (typeof Chart !== 'undefined') {
+            this.initCharts();
+        }
+    }
+    
+    initCharts() {
+        // Activity Chart
+        const activityCtx = document.getElementById('activityChart');
+        if (activityCtx) {
+            new Chart(activityCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab', 'Min'],
+                    datasets: [{
+                        label: 'Menit Fokus',
+                        data: [75, 100, 50, 125, 90, 60, 100],
+                        backgroundColor: 'rgba(108, 99, 255, 0.7)',
+                        borderColor: 'rgba(108, 99, 255, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Menit'
+                            }
                         }
-                    });
-                }
-            }
-        } else {
-            // User is not logged in
-            if (navUser && loginBtn && registerBtn) {
-                navUser.innerHTML = `
-                    <a href="login.html" class="btn btn-outline btn-small" id="loginBtn">Masuk</a>
-                    <a href="register.html" class="btn btn-primary btn-small" id="registerBtn">Daftar</a>
-                `;
-            }
-        }
-    }
-    
-    // User authentication methods
-    login(email, password) {
-        // In a real app, this would be an API call
-        // For demo purposes, we'll simulate a successful login
-        this.user = {
-            id: 1,
-            name: 'John Doe',
-            email: email,
-            avatar: 'https://i.pravatar.cc/100',
-            plan: 'free' // free, pro, team
-        };
-        
-        this.saveUserData();
-        this.updateUserNavigation();
-        this.showNotification('Berhasil masuk!');
-    }
-    
-    logout() {
-        this.user = null;
-        localStorage.removeItem('studyFocusUser');
-        this.updateUserNavigation();
-        this.showNotification('Anda telah keluar.');
-        
-        // Redirect to home page if on a protected page
-        const protectedPages = ['dashboard.html', 'profile.html', 'settings.html'];
-        if (protectedPages.includes(this.currentPage)) {
-            window.location.href = 'index.html';
-        }
-    }
-    
-    saveUserData() {
-        if (this.user) {
-            localStorage.setItem('studyFocusUser', JSON.stringify(this.user));
-        }
-    }
-    
-    loadUserData() {
-        const savedUser = localStorage.getItem('studyFocusUser');
-        if (savedUser) {
-            this.user = JSON.parse(savedUser);
-        }
-    }
-    
-    // Enhanced notification system
-    showNotification(message, type = 'success', duration = 5000) {
-        // Remove existing notifications
-        document.querySelectorAll('.notification').forEach(notification => {
-            notification.remove();
-        });
-        
-        // Create new notification
-        const notification = document.createElement('div');
-        notification.className = `notification ${type}`;
-        notification.innerHTML = `
-            <div class="notification-content">
-                <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle'}"></i>
-                <p>${message}</p>
-            </div>
-            <button class="notification-close">
-                <i class="fas fa-times"></i>
-            </button>
-        `;
-        
-        document.body.appendChild(notification);
-        
-        // Add close functionality
-        const closeBtn = notification.querySelector('.notification-close');
-        if (closeBtn) {
-            closeBtn.addEventListener('click', () => {
-                notification.remove();
-            });
-        }
-        
-        // Remove notification after duration
-        setTimeout(() => {
-            if (notification.parentNode) {
-                notification.remove();
-            }
-        }, duration);
-    }
-    
-    // Enhanced event listeners
-    setupEventListeners() {
-        // Fullscreen toggle
-        const fullscreenToggle = document.getElementById('fullscreenToggle');
-        if (fullscreenToggle) {
-            fullscreenToggle.addEventListener('click', () => {
-                this.toggleFullscreen();
-            });
-        }
-        
-        // Existing event listeners from base class
-        // ... (previous event listener code)
-        
-        // Document fullscreen change event
-        document.addEventListener('fullscreenchange', () => {
-            this.isFullscreen = !!document.fullscreenElement;
-            this.updateFullscreenButton();
-        });
-    }
-    
-    // Load data with user-specific data
-    loadData() {
-        this.loadUserData();
-        
-        // Load todos with user-specific prefix if logged in
-        const todoKey = this.user ? `studyFocusTodos_${this.user.id}` : 'studyFocusTodos';
-        const savedTodos = localStorage.getItem(todoKey);
-        if (savedTodos) {
-            this.todos = JSON.parse(savedTodos);
-        }
-        
-        // Load pomodoro stats with user-specific prefix if logged in
-        const statsKey = this.user ? `studyFocusStats_${this.user.id}` : 'studyFocusStats';
-        const savedStats = localStorage.getItem(statsKey);
-        if (savedStats) {
-            const stats = JSON.parse(savedStats);
-            this.pomodoroStats = { ...this.pomodoroStats, ...stats };
-            
-            // Reset daily stats if it's a new day
-            const today = new Date().toDateString();
-            const lastSavedDate = localStorage.getItem('studyFocusLastDate');
-            if (lastSavedDate !== today) {
-                // Save yesterday's data to history
-                if (lastSavedDate && (this.pomodoroStats.sessionsToday > 0 || this.pomodoroStats.minutesToday > 0)) {
-                    this.pomodoroStats.history.unshift({
-                        date: lastSavedDate,
-                        sessions: this.pomodoroStats.sessionsToday,
-                        minutes: this.pomodoroStats.minutesToday
-                    });
-                    
-                    // Keep only last 30 days of history
-                    if (this.pomodoroStats.history.length > 30) {
-                        this.pomodoroStats.history = this.pomodoroStats.history.slice(0, 30);
                     }
                 }
+            });
+        }
+        
+        // Distribution Chart
+        const distributionCtx = document.getElementById('timeDistributionChart');
+        if (distributionCtx) {
+            new Chart(distributionCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Matematika', 'Fisika', 'Kimia', 'Bahasa', 'Lainnya'],
+                    datasets: [{
+                        data: [35, 25, 20, 15, 5],
+                        backgroundColor: [
+                            '#6C63FF',
+                            '#FF6584',
+                            '#36D1DC',
+                            '#4CC9F0',
+                            '#F8961E'
+                        ],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    }
+                }
+            });
+        }
+    }
+    
+    // Dashboard functionality
+    renderTodos() {
+        const todoList = document.getElementById('todoList');
+        if (!todoList) return;
+        
+        if (this.todos.length === 0) {
+            todoList.innerHTML = '<li class="empty-message">Belum ada tugas. Tambahkan tugas pertama Anda!</li>';
+            return;
+        }
+        
+        // Only show first 5 todos in dashboard
+        const todosToShow = this.todos.slice(0, 5);
+        
+        todoList.innerHTML = todosToShow.map(todo => `
+            <li class="todo-item-revamped ${todo.priority ? 'priority' : ''}">
+                <input type="checkbox" class="todo-checkbox-revamped" ${todo.completed ? 'checked' : ''} 
+                    onchange="window.studyFocusApp.toggleTodo(${todo.id})">
+                <span class="todo-text-revamped ${todo.completed ? 'completed' : ''}">${todo.text}</span>
+                <div class="todo-actions-revamped">
+                    <button class="todo-action-btn edit" onclick="window.studyFocusApp.editTodo(${todo.id})" title="Edit tugas">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="todo-action-btn delete" onclick="window.studyFocusApp.deleteTodo(${todo.id})" title="Hapus tugas">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+            </li>
+        `).join('');
+        
+        // Update remaining tasks count
+        const remainingTasks = document.getElementById('remainingTasks');
+        if (remainingTasks) {
+            const activeTodos = this.todos.filter(todo => !todo.completed).length;
+            remainingTasks.textContent = `${activeTodos} tugas tersisa`;
+        }
+    }
+    
+    updateStats() {
+        // Update today's sessions
+        const todaySessions = document.getElementById('todaySessions');
+        if (todaySessions) {
+            todaySessions.textContent = this.pomodoroStats.sessionsToday;
+        }
+        
+        // Update today's minutes
+        const todayMinutes = document.getElementById('todayMinutes');
+        if (todayMinutes) {
+            todayMinutes.textContent = this.pomodoroStats.minutesToday;
+        }
+        
+        // Update completed tasks
+        const completedTasks = document.getElementById('completedTasks');
+        if (completedTasks) {
+            const completed = this.todos.filter(todo => todo.completed).length;
+            completedTasks.textContent = completed;
+        }
+        
+        // Update progress
+        const progressFill = document.getElementById('progressFill');
+        const progressText = document.getElementById('progressText');
+        if (progressFill && progressText) {
+            const targetSessions = 5;
+            const progress = Math.min(100, (this.pomodoroStats.sessionsToday / targetSessions) * 100);
+            progressFill.style.width = `${progress}%`;
+            progressText.textContent = `${Math.round(progress)}%`;
+        }
+    }
+    
+    updateTimerDisplay() {
+        const timer = document.getElementById('timer');
+        const sessionCounter = document.getElementById('sessionCounter');
+        
+        if (timer) {
+            timer.textContent = '25:00';
+        }
+        
+        if (sessionCounter) {
+            sessionCounter.textContent = 'Sesi: 0';
+        }
+    }
+    
+    // Todo functionality for dashboard
+    addTodo() {
+        const input = document.getElementById('todoInput');
+        if (!input) return;
+        
+        const text = input.value.trim();
+        if (text === '') {
+            this.showNotification('Masukkan teks tugas terlebih dahulu!', 'warning');
+            return;
+        }
+        
+        const todo = {
+            id: Date.now(),
+            text: text,
+            completed: false,
+            createdAt: new Date().toISOString()
+        };
+        
+        this.todos.unshift(todo);
+        input.value = '';
+        
+        this.saveTodos();
+        this.renderTodos();
+        this.updateStats();
+        this.showNotification('Tugas berhasil ditambahkan!', 'success');
+    }
+    
+    toggleTodo(id) {
+        const todo = this.todos.find(t => t.id === id);
+        if (todo) {
+            todo.completed = !todo.completed;
+            this.saveTodos();
+            this.renderTodos();
+            this.updateStats();
+        }
+    }
+    
+    editTodo(id) {
+        const todo = this.todos.find(t => t.id === id);
+        if (todo) {
+            const editModal = document.getElementById('editModal');
+            const editInput = document.getElementById('editTodoInput');
+            const saveEdit = document.getElementById('saveEdit');
+            const cancelEdit = document.getElementById('cancelEdit');
+            
+            if (editModal && editInput) {
+                editInput.value = todo.text;
+                editModal.classList.add('active');
                 
-                this.pomodoroStats.sessionsToday = 0;
-                this.pomodoroStats.minutesToday = 0;
-                localStorage.setItem('studyFocusLastDate', today);
-                this.savePomodoroStats();
+                // Save edit
+                const saveHandler = () => {
+                    const newText = editInput.value.trim();
+                    if (newText === '') {
+                        this.showNotification('Teks tugas tidak boleh kosong!', 'warning');
+                        return;
+                    }
+                    
+                    todo.text = newText;
+                    this.saveTodos();
+                    this.renderTodos();
+                    editModal.classList.remove('active');
+                    this.showNotification('Tugas berhasil diperbarui!', 'success');
+                    
+                    // Remove event listeners
+                    saveEdit.removeEventListener('click', saveHandler);
+                    cancelEdit.removeEventListener('click', cancelHandler);
+                };
+                
+                // Cancel edit
+                const cancelHandler = () => {
+                    editModal.classList.remove('active');
+                    
+                    // Remove event listeners
+                    saveEdit.removeEventListener('click', saveHandler);
+                    cancelEdit.removeEventListener('click', cancelHandler);
+                };
+                
+                saveEdit.addEventListener('click', saveHandler);
+                cancelEdit.addEventListener('click', cancelHandler);
+                
+                // Close modal when clicking outside
+                const modalClickHandler = (e) => {
+                    if (e.target === editModal) {
+                        cancelHandler();
+                    }
+                };
+                
+                editModal.addEventListener('click', modalClickHandler);
             }
         }
-        
-        // Load quick notes with user-specific prefix if logged in
-        const notesKey = this.user ? `studyFocusNotes_${this.user.id}` : 'studyFocusNotes';
-        const savedNotes = localStorage.getItem(notesKey);
-        if (savedNotes) {
-            this.quickNotes = savedNotes;
-            const notesTextarea = document.getElementById('quickNotes');
-            if (notesTextarea) {
-                notesTextarea.value = this.quickNotes;
-            }
-        }
-        
-        // Load theme
-        const savedTheme = localStorage.getItem('studyFocusTheme');
-        if (savedTheme) {
-            this.currentTheme = savedTheme;
+    }
+    
+    deleteTodo(id) {
+        if (confirm('Hapus tugas ini?')) {
+            this.todos = this.todos.filter(t => t.id !== id);
+            this.saveTodos();
+            this.renderTodos();
+            this.updateStats();
+            this.showNotification('Tugas berhasil dihapus!', 'success');
         }
     }
-    
-    // Save data with user-specific prefix if logged in
-    saveTodos() {
-        const todoKey = this.user ? `studyFocusTodos_${this.user.id}` : 'studyFocusTodos';
-        localStorage.setItem(todoKey, JSON.stringify(this.todos));
-    }
-    
-    savePomodoroStats() {
-        const statsKey = this.user ? `studyFocusStats_${this.user.id}` : 'studyFocusStats';
-        localStorage.setItem(statsKey, JSON.stringify(this.pomodoroStats));
-    }
-    
-    saveQuickNotes() {
-        const notesKey = this.user ? `studyFocusNotes_${this.user.id}` : 'studyFocusNotes';
-        localStorage.setItem(notesKey, this.quickNotes);
-    }
-    
-    // Other methods remain largely the same but with enhanced functionality
-    // ... (previous methods with potential enhancements)
 }
 
-// Initialize the enhanced app when DOM is loaded
+// Initialize the app when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
-    window.studyFocusApp = new EnhancedStudyFocusApp();
+    window.studyFocusApp = new StudyFocusApp();
 });
 
 // Pomodoro Timer Functionality
@@ -501,9 +818,13 @@ class PomodoroTimer {
     
     setupEventListeners() {
         // Timer controls
-        document.getElementById('startTimer').addEventListener('click', () => this.start());
-        document.getElementById('pauseTimer').addEventListener('click', () => this.pause());
-        document.getElementById('resetTimer').addEventListener('click', () => this.reset());
+        const startTimer = document.getElementById('startTimer');
+        const pauseTimer = document.getElementById('pauseTimer');
+        const resetTimer = document.getElementById('resetTimer');
+        
+        if (startTimer) startTimer.addEventListener('click', () => this.start());
+        if (pauseTimer) pauseTimer.addEventListener('click', () => this.pause());
+        if (resetTimer) resetTimer.addEventListener('click', () => this.reset());
         
         // Mode buttons
         document.querySelectorAll('.mode-btn').forEach(btn => {
@@ -514,17 +835,23 @@ class PomodoroTimer {
         });
         
         // Task integration
-        document.getElementById('startTask').addEventListener('click', () => {
-            this.startWithTask();
-        });
+        const startTask = document.getElementById('startTask');
+        if (startTask) {
+            startTask.addEventListener('click', () => {
+                this.startWithTask();
+            });
+        }
     }
     
     start() {
         if (this.isRunning) return;
         
         this.isRunning = true;
-        document.getElementById('startTimer').disabled = true;
-        document.getElementById('pauseTimer').disabled = false;
+        const startBtn = document.getElementById('startTimer');
+        const pauseBtn = document.getElementById('pauseTimer');
+        
+        if (startBtn) startBtn.disabled = true;
+        if (pauseBtn) pauseBtn.disabled = false;
         
         this.interval = setInterval(() => {
             this.tick();
@@ -537,8 +864,11 @@ class PomodoroTimer {
         if (!this.isRunning) return;
         
         this.isRunning = false;
-        document.getElementById('startTimer').disabled = false;
-        document.getElementById('pauseTimer').disabled = true;
+        const startBtn = document.getElementById('startTimer');
+        const pauseBtn = document.getElementById('pauseTimer');
+        
+        if (startBtn) startBtn.disabled = false;
+        if (pauseBtn) pauseBtn.disabled = true;
         
         clearInterval(this.interval);
         this.updateButtonStates();
@@ -578,8 +908,19 @@ class PomodoroTimer {
             this.totalMinutes += this.modeDurations.focus;
             
             // Update UI
-            document.getElementById('todayPomodoroSessions').textContent = this.totalSessions;
-            document.getElementById('todayPomodoroMinutes').textContent = this.totalMinutes;
+            const todaySessions = document.getElementById('todayPomodoroSessions');
+            const todayMinutes = document.getElementById('todayPomodoroMinutes');
+            
+            if (todaySessions) todaySessions.textContent = this.totalSessions;
+            if (todayMinutes) todayMinutes.textContent = this.totalMinutes;
+            
+            // Update global stats
+            if (window.studyFocusApp) {
+                window.studyFocusApp.pomodoroStats.sessionsToday = this.totalSessions;
+                window.studyFocusApp.pomodoroStats.minutesToday = this.totalMinutes;
+                window.studyFocusApp.savePomodoroStats();
+                window.studyFocusApp.updateStats();
+            }
             
             // Show notification
             this.showNotification('Sesi fokus selesai! Waktu untuk istirahat.', 'success');
@@ -619,7 +960,10 @@ class PomodoroTimer {
             shortBreak: 'Istirahat Pendek',
             longBreak: 'Istirahat Panjang'
         };
-        document.getElementById('timerStatus').textContent = statusMap[mode];
+        const timerStatus = document.getElementById('timerStatus');
+        if (timerStatus) {
+            timerStatus.textContent = statusMap[mode];
+        }
         
         this.updateDisplay();
         this.updateProgressRing();
@@ -628,17 +972,21 @@ class PomodoroTimer {
     
     updateDisplay() {
         const timerElement = document.getElementById('timer');
-        const minutesStr = this.minutes.toString().padStart(2, '0');
-        const secondsStr = this.seconds.toString().padStart(2, '0');
-        timerElement.textContent = `${minutesStr}:${secondsStr}`;
+        if (timerElement) {
+            const minutesStr = this.minutes.toString().padStart(2, '0');
+            const secondsStr = this.seconds.toString().padStart(2, '0');
+            timerElement.textContent = `${minutesStr}:${secondsStr}`;
+        }
     }
     
     updateProgressRing() {
+        const circle = document.querySelector('.progress-ring-circle');
+        if (!circle) return;
+        
         const totalSeconds = this.modeDurations[this.mode] * 60;
         const remainingSeconds = this.minutes * 60 + this.seconds;
         const progress = (totalSeconds - remainingSeconds) / totalSeconds;
         
-        const circle = document.querySelector('.progress-ring-circle');
         const radius = 140;
         const circumference = 2 * Math.PI * radius;
         const offset = circumference - (progress * circumference);
@@ -649,7 +997,9 @@ class PomodoroTimer {
     
     updateSessionCounter() {
         const sessionCounter = document.getElementById('sessionCounter');
-        sessionCounter.textContent = `Sesi: ${this.completedSessions}/4`;
+        if (sessionCounter) {
+            sessionCounter.textContent = `Sesi: ${this.completedSessions}/4`;
+        }
     }
     
     updateButtonStates() {
@@ -657,16 +1007,18 @@ class PomodoroTimer {
         const pauseBtn = document.getElementById('pauseTimer');
         
         if (this.isRunning) {
-            startBtn.disabled = true;
-            pauseBtn.disabled = false;
+            if (startBtn) startBtn.disabled = true;
+            if (pauseBtn) pauseBtn.disabled = false;
         } else {
-            startBtn.disabled = false;
-            pauseBtn.disabled = true;
+            if (startBtn) startBtn.disabled = false;
+            if (pauseBtn) pauseBtn.disabled = true;
         }
     }
     
     startWithTask() {
         const taskSelect = document.getElementById('taskSelect');
+        if (!taskSelect) return;
+        
         const selectedTask = taskSelect.value;
         
         if (!selectedTask) {
@@ -678,54 +1030,32 @@ class PomodoroTimer {
         const taskDisplay = document.getElementById('currentTaskDisplay');
         const taskText = taskSelect.options[taskSelect.selectedIndex].text;
         
-        taskDisplay.innerHTML = `
-            <div class="active-task">
-                <div class="task-header">
-                    <i class="fas fa-tasks"></i>
-                    <h4>Tugas Aktif</h4>
-                </div>
-                <p class="task-name">${taskText}</p>
-                <div class="task-progress">
-                    <div class="progress-bar">
-                        <div class="progress-fill" style="width: 0%"></div>
+        if (taskDisplay) {
+            taskDisplay.innerHTML = `
+                <div class="active-task">
+                    <div class="task-header">
+                        <i class="fas fa-tasks"></i>
+                        <h4>Tugas Aktif</h4>
                     </div>
-                    <span class="progress-text">0%</span>
+                    <p class="task-name">${taskText}</p>
+                    <div class="task-progress">
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 0%"></div>
+                        </div>
+                        <span class="progress-text">0%</span>
+                    </div>
                 </div>
-            </div>
-        `;
+            `;
+        }
         
         this.showNotification(`Memulai sesi Pomodoro untuk: ${taskText}`, 'success');
         this.start();
     }
     
     showNotification(message, type = 'info') {
-        // Create notification element
-        const notification = document.createElement('div');
-        notification.className = `notification ${type}`;
-        notification.innerHTML = `
-            <div class="notification-content">
-                <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'warning' ? 'exclamation-triangle' : 'info-circle'}"></i>
-                <p>${message}</p>
-            </div>
-            <button class="notification-close">
-                <i class="fas fa-times"></i>
-            </button>
-        `;
-        
-        document.body.appendChild(notification);
-        
-        // Add close functionality
-        const closeBtn = notification.querySelector('.notification-close');
-        closeBtn.addEventListener('click', () => {
-            notification.remove();
-        });
-        
-        // Remove notification after 5 seconds
-        setTimeout(() => {
-            if (notification.parentNode) {
-                notification.remove();
-            }
-        }, 5000);
+        if (window.studyFocusApp) {
+            window.studyFocusApp.showNotification(message, type);
+        }
     }
     
     loadStats() {
@@ -736,8 +1066,11 @@ class PomodoroTimer {
             this.totalMinutes = stats.totalMinutes || 0;
             
             // Update UI
-            document.getElementById('todayPomodoroSessions').textContent = this.totalSessions;
-            document.getElementById('todayPomodoroMinutes').textContent = this.totalMinutes;
+            const todaySessions = document.getElementById('todayPomodoroSessions');
+            const todayMinutes = document.getElementById('todayPomodoroMinutes');
+            
+            if (todaySessions) todaySessions.textContent = this.totalSessions;
+            if (todayMinutes) todayMinutes.textContent = this.totalMinutes;
             
             // Calculate streak (simplified)
             const lastUsed = localStorage.getItem('pomodoroLastUsed');
@@ -745,7 +1078,10 @@ class PomodoroTimer {
             
             if (lastUsed === today) {
                 const currentStreak = parseInt(localStorage.getItem('pomodoroStreak') || '0');
-                document.getElementById('currentStreak').textContent = currentStreak;
+                const streakElement = document.getElementById('currentStreak');
+                if (streakElement) {
+                    streakElement.textContent = currentStreak;
+                }
             }
         }
     }
@@ -779,17 +1115,13 @@ class PomodoroTimer {
             localStorage.setItem('pomodoroStreak', streak.toString());
             localStorage.setItem('pomodoroLastUsed', today);
             
-            document.getElementById('currentStreak').textContent = streak;
+            const streakElement = document.getElementById('currentStreak');
+            if (streakElement) {
+                streakElement.textContent = streak;
+            }
         }
     }
 }
-
-// Initialize Pomodoro Timer when page loads
-document.addEventListener('DOMContentLoaded', () => {
-    if (document.querySelector('.pomodoro-page')) {
-        window.pomodoroTimer = new PomodoroTimer();
-    }
-});
 
 // Enhanced To-Do List Functionality
 class EnhancedTodoList {
@@ -809,10 +1141,15 @@ class EnhancedTodoList {
     
     setupEventListeners() {
         // Add todo
-        document.getElementById('addTodo').addEventListener('click', () => this.addTodo());
-        document.getElementById('todoInput').addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') this.addTodo();
-        });
+        const addTodo = document.getElementById('addTodo');
+        const todoInput = document.getElementById('todoInput');
+        
+        if (addTodo) addTodo.addEventListener('click', () => this.addTodo());
+        if (todoInput) {
+            todoInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') this.addTodo();
+            });
+        }
         
         // Filters
         document.querySelectorAll('.filter-btn').forEach(btn => {
@@ -823,20 +1160,29 @@ class EnhancedTodoList {
         });
         
         // Clear completed
-        document.getElementById('clearCompleted').addEventListener('click', () => this.clearCompleted());
+        const clearCompleted = document.getElementById('clearCompleted');
+        if (clearCompleted) {
+            clearCompleted.addEventListener('click', () => this.clearCompleted());
+        }
         
         // Modal events
-        document.getElementById('saveEdit').addEventListener('click', () => this.saveEdit());
-        document.getElementById('cancelEdit').addEventListener('click', () => this.closeEditModal());
+        const saveEdit = document.getElementById('saveEdit');
+        const cancelEdit = document.getElementById('cancelEdit');
+        const editModal = document.getElementById('editModal');
         
-        // Close modal when clicking outside
-        document.getElementById('editModal').addEventListener('click', (e) => {
-            if (e.target.id === 'editModal') this.closeEditModal();
-        });
+        if (saveEdit) saveEdit.addEventListener('click', () => this.saveEdit());
+        if (cancelEdit) cancelEdit.addEventListener('click', () => this.closeEditModal());
+        if (editModal) {
+            editModal.addEventListener('click', (e) => {
+                if (e.target.id === 'editModal') this.closeEditModal();
+            });
+        }
     }
     
     addTodo() {
         const input = document.getElementById('todoInput');
+        if (!input) return;
+        
         const text = input.value.trim();
         
         if (text === '') {
@@ -898,8 +1244,11 @@ class EnhancedTodoList {
         const todo = this.todos.find(t => t.id === id);
         if (todo) {
             this.editingId = id;
-            document.getElementById('editTodoInput').value = todo.text;
-            document.getElementById('editModal').classList.add('active');
+            const editInput = document.getElementById('editTodoInput');
+            const editModal = document.getElementById('editModal');
+            
+            if (editInput) editInput.value = todo.text;
+            if (editModal) editModal.classList.add('active');
         }
     }
     
@@ -907,6 +1256,8 @@ class EnhancedTodoList {
         if (this.editingId === null) return;
         
         const input = document.getElementById('editTodoInput');
+        if (!input) return;
+        
         const text = input.value.trim();
         
         if (text === '') {
@@ -926,15 +1277,18 @@ class EnhancedTodoList {
     
     closeEditModal() {
         this.editingId = null;
-        document.getElementById('editModal').classList.remove('active');
+        const editModal = document.getElementById('editModal');
+        if (editModal) editModal.classList.remove('active');
     }
     
     deleteTodo(id) {
-        this.todos = this.todos.filter(t => t.id !== id);
-        this.saveTodos();
-        this.renderTodos();
-        this.updateStats();
-        this.showNotification('Tugas berhasil dihapus!', 'success');
+        if (confirm('Hapus tugas ini?')) {
+            this.todos = this.todos.filter(t => t.id !== id);
+            this.saveTodos();
+            this.renderTodos();
+            this.updateStats();
+            this.showNotification('Tugas berhasil dihapus!', 'success');
+        }
     }
     
     clearCompleted() {
@@ -945,11 +1299,13 @@ class EnhancedTodoList {
             return;
         }
         
-        this.todos = this.todos.filter(t => !t.completed);
-        this.saveTodos();
-        this.renderTodos();
-        this.updateStats();
-        this.showNotification(`${completedCount} tugas selesai telah dihapus!`, 'success');
+        if (confirm(`Hapus ${completedCount} tugas yang sudah selesai?`)) {
+            this.todos = this.todos.filter(t => !t.completed);
+            this.saveTodos();
+            this.renderTodos();
+            this.updateStats();
+            this.showNotification(`${completedCount} tugas selesai telah dihapus!`, 'success');
+        }
     }
     
     getFilteredTodos() {
@@ -967,6 +1323,8 @@ class EnhancedTodoList {
     
     renderTodos() {
         const todoList = document.getElementById('todoList');
+        if (!todoList) return;
+        
         const filteredTodos = this.getFilteredTodos();
         
         if (filteredTodos.length === 0) {
@@ -1020,22 +1378,29 @@ class EnhancedTodoList {
         const completedTasks = this.todos.filter(t => t.completed).length;
         const progress = totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0;
         
-        document.getElementById('totalTasks').textContent = totalTasks;
-        document.getElementById('completedTasks').textContent = completedTasks;
-        document.getElementById('todoProgressFill').style.width = `${progress}%`;
-        document.getElementById('todoProgressText').textContent = `${progress}%`;
+        const totalTasksElement = document.getElementById('totalTasks');
+        const completedTasksElement = document.getElementById('completedTasks');
+        const progressFill = document.getElementById('todoProgressFill');
+        const progressText = document.getElementById('todoProgressText');
+        
+        if (totalTasksElement) totalTasksElement.textContent = totalTasks;
+        if (completedTasksElement) completedTasksElement.textContent = completedTasks;
+        if (progressFill) progressFill.style.width = `${progress}%`;
+        if (progressText) progressText.textContent = `${progress}%`;
     }
     
     saveTodos() {
-        const todoKey = window.studyFocusApp?.user ? 
-            `studyFocusTodos_${window.studyFocusApp.user.id}` : 'studyFocusTodos';
-        localStorage.setItem(todoKey, JSON.stringify(this.todos));
+        localStorage.setItem('studyFocusTodos', JSON.stringify(this.todos));
+        
+        // Update global app if exists
+        if (window.studyFocusApp) {
+            window.studyFocusApp.todos = this.todos;
+            window.studyFocusApp.saveTodos();
+        }
     }
     
     loadTodos() {
-        const todoKey = window.studyFocusApp?.user ? 
-            `studyFocusTodos_${window.studyFocusApp.user.id}` : 'studyFocusTodos';
-        const savedTodos = localStorage.getItem(todoKey);
+        const savedTodos = localStorage.getItem('studyFocusTodos');
         
         if (savedTodos) {
             this.todos = JSON.parse(savedTodos);
@@ -1045,133 +1410,19 @@ class EnhancedTodoList {
     showNotification(message, type = 'success') {
         if (window.studyFocusApp) {
             window.studyFocusApp.showNotification(message, type);
-        } else {
-            // Fallback notification
-            const notification = document.createElement('div');
-            notification.className = `notification ${type}`;
-            notification.innerHTML = `
-                <div class="notification-content">
-                    <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'warning' ? 'exclamation-triangle' : 'info-circle'}"></i>
-                    <p>${message}</p>
-                </div>
-                <button class="notification-close" onclick="this.parentElement.remove()">
-                    <i class="fas fa-times"></i>
-                </button>
-            `;
-            
-            document.body.appendChild(notification);
-            
-            setTimeout(() => {
-                if (notification.parentNode) {
-                    notification.remove();
-                }
-            }, 5000);
         }
     }
 }
 
-// Initialize Todo App when page loads
+// Initialize apps when page loads
 document.addEventListener('DOMContentLoaded', () => {
-    if (document.querySelector('.todo-page')) {
+    // Initialize Pomodoro Timer if on pomodoro page
+    if (document.querySelector('.pomodoro-page') && typeof PomodoroTimer !== 'undefined') {
+        window.pomodoroTimer = new PomodoroTimer();
+    }
+    
+    // Initialize Todo App if on todo page
+    if (document.querySelector('.todo-page') && typeof EnhancedTodoList !== 'undefined') {
         window.todoApp = new EnhancedTodoList();
-    }
-});
-
-// Floating Navbar Functionality
-class FloatingNavbar {
-    constructor() {
-        this.init();
-    }
-    
-    init() {
-        this.setupEventListeners();
-        this.setupNavigation();
-    }
-    
-    setupEventListeners() {
-        // Theme toggle
-        const themeToggle = document.getElementById('floatingThemeToggle');
-        if (themeToggle) {
-            themeToggle.addEventListener('click', () => {
-                this.toggleTheme();
-            });
-        }
-        
-        // Mobile menu toggle
-        const navToggle = document.getElementById('floatingNavToggle');
-        const navMenu = document.getElementById('floatingNavMenu');
-        
-        if (navToggle && navMenu) {
-            navToggle.addEventListener('click', () => {
-                navMenu.classList.toggle('active');
-                navToggle.classList.toggle('active');
-            });
-            
-            // Close mobile menu when clicking on a link
-            document.querySelectorAll('.floating-nav-link').forEach(link => {
-                link.addEventListener('click', () => {
-                    navMenu.classList.remove('active');
-                    navToggle.classList.remove('active');
-                });
-            });
-            
-            // Close mobile menu when clicking outside
-            document.addEventListener('click', (e) => {
-                if (!navToggle.contains(e.target) && !navMenu.contains(e.target)) {
-                    navMenu.classList.remove('active');
-                    navToggle.classList.remove('active');
-                }
-            });
-        }
-    }
-    
-    setupNavigation() {
-        // Highlight current page in navigation
-        const currentPage = window.location.pathname.split('/').pop() || 'index.html';
-        document.querySelectorAll('.floating-nav-link').forEach(link => {
-            const href = link.getAttribute('href');
-            if (href === currentPage) {
-                link.classList.add('active');
-            } else {
-                link.classList.remove('active');
-            }
-        });
-    }
-    
-    toggleTheme() {
-        const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
-        const newTheme = currentTheme === 'light' ? 'dark' : 'light';
-        
-        document.documentElement.setAttribute('data-theme', newTheme);
-        localStorage.setItem('studyFocusTheme', newTheme);
-        
-        // Update theme button icon
-        const themeBtn = document.getElementById('floatingThemeToggle');
-        if (themeBtn) {
-            const icon = themeBtn.querySelector('i');
-            if (icon) {
-                icon.className = newTheme === 'light' ? 'fas fa-moon' : 'fas fa-sun';
-            }
-        }
-        
-        // Update main theme toggle if exists
-        const mainThemeBtn = document.getElementById('themeToggle');
-        if (mainThemeBtn) {
-            const mainIcon = mainThemeBtn.querySelector('i');
-            if (mainIcon) {
-                mainIcon.className = newTheme === 'light' ? 'fas fa-moon' : 'fas fa-sun';
-            }
-        }
-    }
-}
-
-// Initialize Floating Navbar when DOM is loaded
-document.addEventListener('DOMContentLoaded', () => {
-    window.floatingNavbar = new FloatingNavbar();
-    
-    // Initialize charts if on stats page
-    if (document.querySelector('.stats-page')) {
-        // Chart initialization code would go here
-        // This is already handled in the stats.html file
     }
 });
