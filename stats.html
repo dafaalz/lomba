@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Statistik - StudyFocus</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <a href="index.html" class="logo">
+                    <i class="fas fa-brain"></i>
+                    <span>StudyFocus</span>
+                </a>
+            </div>
+            <div class="nav-menu" id="navMenu">
+                <a href="index.html" class="nav-link">Beranda</a>
+                <a href="dashboard.html" class="nav-link">Dashboard</a>
+                <a href="pomodoro.html" class="nav-link">Pomodoro</a>
+                <a href="todo.html" class="nav-link">To-Do List</a>
+                <a href="stats.html" class="nav-link active">Statistik</a>
+            </div>
+            <div class="nav-actions">
+                <button id="themeToggle" class="theme-btn">
+                    <i class="fas fa-moon"></i>
+                </button>
+                <button class="nav-toggle" id="navToggle">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <main class="stats-page">
+        <div class="container">
+            <div class="page-header">
+                <h1>Statistik Belajar</h1>
+                <p>Pantau progress dan produktivitas belajar Anda</p>
+            </div>
+
+            <div class="stats-grid-full">
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>Sesi Hari Ini</h3>
+                        <div class="stat-value" id="todaySessions">0</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-hourglass-half"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>Menit Fokus Hari Ini</h3>
+                        <div class="stat-value" id="todayMinutes">0</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-tasks"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>Tugas Selesai</h3>
+                        <div class="stat-value" id="completedTasks">0</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-bullseye"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>Progress Harian</h3>
+                        <div class="progress-container">
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="progressFill"></div>
+                            </div>
+                            <span class="progress-text" id="progressText">0%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chart-container">
+                <h3>Aktivitas Belajar 7 Hari Terakhir</h3>
+                <div class="chart-placeholder">
+                    Grafik aktivitas belajar akan ditampilkan di sini
+                </div>
+            </div>
+
+            <div class="stats-history">
+                <div class="history-card">
+                    <h3>Riwayat Sesi</h3>
+                    <ul class="history-list" id="statsHistory">
+                        <!-- History items will be added here -->
+                    </ul>
+                </div>
+                <div class="history-card">
+                    <h3>Pencapaian</h3>
+                    <div class="achievements">
+                        <div class="achievement">
+                            <i class="fas fa-medal"></i>
+                            <span>Pemula Produktif</span>
+                            <small>Selesaikan 5 sesi Pomodoro</small>
+                        </div>
+                        <div class="achievement">
+                            <i class="fas fa-trophy"></i>
+                            <span>Ahli Fokus</span>
+                            <small>Capai 500 menit fokus</small>
+                        </div>
+                        <div class="achievement">
+                            <i class="fas fa-star"></i>
+                            <span>Konsisten</span>
+                            <small>Gunakan app selama 7 hari berturut-turut</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>

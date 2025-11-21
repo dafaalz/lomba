@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pomodoro Timer - StudyFocus</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <a href="index.html" class="logo">
+                    <i class="fas fa-brain"></i>
+                    <span>StudyFocus</span>
+                </a>
+            </div>
+            <div class="nav-menu" id="navMenu">
+                <a href="index.html" class="nav-link">Beranda</a>
+                <a href="dashboard.html" class="nav-link">Dashboard</a>
+                <a href="pomodoro.html" class="nav-link active">Pomodoro</a>
+                <a href="todo.html" class="nav-link">To-Do List</a>
+                <a href="stats.html" class="nav-link">Statistik</a>
+            </div>
+            <div class="nav-actions">
+                <button id="themeToggle" class="theme-btn">
+                    <i class="fas fa-moon"></i>
+                </button>
+                <button class="nav-toggle" id="navToggle">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <main class="pomodoro-page">
+        <div class="container">
+            <div class="page-header">
+                <h1>Pomodoro Timer</h1>
+                <p>Teknik manajemen waktu untuk meningkatkan fokus dan produktivitas belajar</p>
+            </div>
+
+            <div class="pomodoro-full">
+                <div class="pomodoro-card">
+                    <div class="timer-display">
+                        <div class="timer" id="timer">25:00</div>
+                        <div class="session-counter" id="sessionCounter">Sesi: 0</div>
+                    </div>
+                    <div class="timer-controls">
+                        <button id="startTimer" class="btn btn-primary">Mulai</button>
+                        <button id="pauseTimer" class="btn btn-secondary" disabled>Jeda</button>
+                        <button id="resetTimer" class="btn btn-secondary">Reset</button>
+                    </div>
+                    <div class="timer-modes">
+                        <button class="mode-btn active" data-mode="focus">Fokus (25m)</button>
+                        <button class="mode-btn" data-mode="shortBreak">Istirahat Pendek (5m)</button>
+                        <button class="mode-btn" data-mode="longBreak">Istirahat Panjang (15m)</button>
+                    </div>
+                </div>
+
+                <div class="pomodoro-info">
+                    <h3>Tips Menggunakan Pomodoro</h3>
+                    <ul>
+                        <li>Pilih tugas yang akan dikerjakan sebelum memulai timer</li>
+                        <li>Hilangkan gangguan (notifikasi, sosial media) selama sesi fokus</li>
+                        <li>Gunakan waktu istirahat untuk meregangkan badan atau berjalan sebentar</li>
+                        <li>Setelah 4 sesi fokus, ambil istirahat panjang 15-30 menit</li>
+                        <li>Catat progres Anda di To-Do List dan Statistik</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>

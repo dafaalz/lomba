@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To-Do List - StudyFocus</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <a href="index.html" class="logo">
+                    <i class="fas fa-brain"></i>
+                    <span>StudyFocus</span>
+                </a>
+            </div>
+            <div class="nav-menu" id="navMenu">
+                <a href="index.html" class="nav-link">Beranda</a>
+                <a href="dashboard.html" class="nav-link">Dashboard</a>
+                <a href="pomodoro.html" class="nav-link">Pomodoro</a>
+                <a href="todo.html" class="nav-link active">To-Do List</a>
+                <a href="stats.html" class="nav-link">Statistik</a>
+            </div>
+            <div class="nav-actions">
+                <button id="themeToggle" class="theme-btn">
+                    <i class="fas fa-moon"></i>
+                </button>
+                <button class="nav-toggle" id="navToggle">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <main class="todo-page">
+        <div class="container">
+            <div class="page-header">
+                <h1>To-Do List Belajar</h1>
+                <p>Kelola tugas dan aktivitas belajar Anda dengan mudah</p>
+            </div>
+
+            <div class="todo-full">
+                <div class="todo-card">
+                    <div class="todo-input">
+                        <input type="text" id="todoInput" placeholder="Apa yang ingin Anda pelajari hari ini?">
+                        <button id="addTodo" class="btn btn-primary">Tambah Tugas</button>
+                    </div>
+                    <div class="todo-filters">
+                        <button class="filter-btn active" data-filter="all">Semua</button>
+                        <button class="filter-btn" data-filter="active">Aktif</button>
+                        <button class="filter-btn" data-filter="completed">Selesai</button>
+                    </div>
+                    <ul class="todo-list" id="todoList">
+                        <!-- To-do items akan ditambahkan di sini -->
+                    </ul>
+                    <div class="todo-stats">
+                        <span id="remainingTasks">0 tugas tersisa</span>
+                        <button id="clearCompleted" class="btn btn-outline">Hapus yang Selesai</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal Edit Todo -->
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <h3>Edit Tugas</h3>
+            <input type="text" id="editTodoInput">
+            <div class="modal-actions">
+                <button id="saveEdit" class="btn btn-primary">Simpan</button>
+                <button id="cancelEdit" class="btn btn-secondary">Batal</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
