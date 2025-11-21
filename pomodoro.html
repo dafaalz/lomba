@@ -26,6 +26,9 @@
                 <a href="stats.html" class="nav-link">Statistik</a>
             </div>
             <div class="nav-actions">
+                <button id="fullscreenToggle" class="theme-btn" title="Mode Layar Penuh">
+                    <i class="fas fa-expand"></i>
+                </button>
                 <button id="themeToggle" class="theme-btn">
                     <i class="fas fa-moon"></i>
                 </button>
@@ -39,43 +42,209 @@
     </nav>
 
     <main class="pomodoro-page">
+        <!-- Background Gradient Circles -->
+        <div class="pomodoro-background">
+            <div class="gradient-circle circle-1"></div>
+            <div class="gradient-circle circle-2"></div>
+            <div class="gradient-circle circle-3"></div>
+        </div>
+
         <div class="container">
-            <div class="page-header">
-                <h1>Pomodoro Timer</h1>
-                <p>Teknik manajemen waktu untuk meningkatkan fokus dan produktivitas belajar</p>
+            <!-- Header dengan gaya hero section -->
+            <div class="pomodoro-header">
+                <div class="badge">
+                    <span>⏱️ Teknik Produktivitas</span>
+                </div>
+                <h1 class="pomodoro-title">
+                    Timer <span class="gradient-text">Pomodoro</span>
+                </h1>
+                <p class="pomodoro-description">
+                    Tingkatkan fokus dan produktivitas belajar dengan teknik manajemen waktu yang terbukti efektif.
+                </p>
             </div>
 
-            <div class="pomodoro-full">
-                <div class="pomodoro-card">
-                    <div class="timer-display">
-                        <div class="timer" id="timer">25:00</div>
-                        <div class="session-counter" id="sessionCounter">Sesi: 0</div>
-                    </div>
-                    <div class="timer-controls">
-                        <button id="startTimer" class="btn btn-primary">Mulai</button>
-                        <button id="pauseTimer" class="btn btn-secondary" disabled>Jeda</button>
-                        <button id="resetTimer" class="btn btn-secondary">Reset</button>
-                    </div>
-                    <div class="timer-modes">
-                        <button class="mode-btn active" data-mode="focus">Fokus (25m)</button>
-                        <button class="mode-btn" data-mode="shortBreak">Istirahat Pendek (5m)</button>
-                        <button class="mode-btn" data-mode="longBreak">Istirahat Panjang (15m)</button>
+            <div class="pomodoro-full-revamped">
+                <!-- Timer Section -->
+                <div class="pomodoro-main-section">
+                    <div class="feature-card pomodoro-card-revamped">
+                        <div class="timer-display-revamped">
+                            <div class="timer-circle-revamped">
+                                <div class="timer" id="timer">25:00</div>
+                                <div class="timer-progress">
+                                    <div class="progress-ring">
+                                        <svg width="300" height="300" viewBox="0 0 300 300">
+                                            <circle cx="150" cy="150" r="140" stroke="var(--border-color)" stroke-width="8" fill="none"></circle>
+                                            <circle cx="150" cy="150" r="140" stroke="var(--primary-color)" stroke-width="8" fill="none" 
+                                                stroke-dasharray="879" stroke-dashoffset="0" class="progress-ring-circle"></circle>
+                                        </svg>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="session-info">
+                                <div class="session-counter" id="sessionCounter">Sesi: 0/4</div>
+                                <div class="timer-status" id="timerStatus">Mode Fokus</div>
+                            </div>
+                        </div>
+                        
+                        <div class="timer-controls-revamped">
+                            <button id="startTimer" class="btn btn-primary btn-large">
+                                <i class="fas fa-play"></i> Mulai
+                            </button>
+                            <button id="pauseTimer" class="btn btn-secondary btn-large" disabled>
+                                <i class="fas fa-pause"></i> Jeda
+                            </button>
+                            <button id="resetTimer" class="btn btn-outline btn-large">
+                                <i class="fas fa-redo"></i> Reset
+                            </button>
+                        </div>
+                        
+                        <div class="timer-modes-revamped">
+                            <button class="mode-btn active" data-mode="focus" data-duration="25">
+                                <i class="fas fa-bullseye"></i> 
+                                <span>Fokus</span>
+                                <small>25 menit</small>
+                            </button>
+                            <button class="mode-btn" data-mode="shortBreak" data-duration="5">
+                                <i class="fas fa-coffee"></i> 
+                                <span>Istirahat Pendek</span>
+                                <small>5 menit</small>
+                            </button>
+                            <button class="mode-btn" data-mode="longBreak" data-duration="15">
+                                <i class="fas fa-walking"></i> 
+                                <span>Istirahat Panjang</span>
+                                <small>15 menit</small>
+                            </button>
+                        </div>
                     </div>
                 </div>
 
-                <div class="pomodoro-info">
-                    <h3>Tips Menggunakan Pomodoro</h3>
-                    <ul>
-                        <li>Pilih tugas yang akan dikerjakan sebelum memulai timer</li>
-                        <li>Hilangkan gangguan (notifikasi, sosial media) selama sesi fokus</li>
-                        <li>Gunakan waktu istirahat untuk meregangkan badan atau berjalan sebentar</li>
-                        <li>Setelah 4 sesi fokus, ambil istirahat panjang 15-30 menit</li>
-                        <li>Catat progres Anda di To-Do List dan Statistik</li>
-                    </ul>
+                <!-- Stats & Info Section -->
+                <div class="pomodoro-side-section">
+                    <!-- Quick Stats -->
+                    <div class="feature-card pomodoro-stats-card">
+                        <h3><i class="fas fa-chart-line"></i> Statistik Hari Ini</h3>
+                        <div class="pomodoro-stats-grid">
+                            <div class="pomodoro-stat">
+                                <div class="pomodoro-stat-icon">
+                                    <i class="fas fa-clock"></i>
+                                </div>
+                                <div class="pomodoro-stat-info">
+                                    <span class="pomodoro-stat-value" id="todayPomodoroSessions">0</span>
+                                    <span class="pomodoro-stat-label">Sesi Selesai</span>
+                                </div>
+                            </div>
+                            <div class="pomodoro-stat">
+                                <div class="pomodoro-stat-icon">
+                                    <i class="fas fa-hourglass-half"></i>
+                                </div>
+                                <div class="pomodoro-stat-info">
+                                    <span class="pomodoro-stat-value" id="todayPomodoroMinutes">0</span>
+                                    <span class="pomodoro-stat-label">Menit Fokus</span>
+                                </div>
+                            </div>
+                            <div class="pomodoro-stat">
+                                <div class="pomodoro-stat-icon">
+                                    <i class="fas fa-fire"></i>
+                                </div>
+                                <div class="pomodoro-stat-info">
+                                    <span class="pomodoro-stat-value" id="currentStreak">0</span>
+                                    <span class="pomodoro-stat-label">Hari Beruntun</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tips Section -->
+                    <div class="feature-card pomodoro-tips-card">
+                        <h3><i class="fas fa-lightbulb"></i> Tips Pomodoro</h3>
+                        <div class="pomodoro-tips-list">
+                            <div class="pomodoro-tip">
+                                <div class="tip-icon">
+                                    <i class="fas fa-check-circle"></i>
+                                </div>
+                                <div class="tip-content">
+                                    <h4>Pilih Tugas Spesifik</h4>
+                                    <p>Tentukan tugas yang jelas sebelum memulai timer untuk menghindari kebingungan.</p>
+                                </div>
+                            </div>
+                            <div class="pomodoro-tip">
+                                <div class="tip-icon">
+                                    <i class="fas fa-check-circle"></i>
+                                </div>
+                                <div class="tip-content">
+                                    <h4>Hilangkan Gangguan</h4>
+                                    <p>Matikan notifikasi dan fokus sepenuhnya selama sesi 25 menit.</p>
+                                </div>
+                            </div>
+                            <div class="pomodoro-tip">
+                                <div class="tip-icon">
+                                    <i class="fas fa-check-circle"></i>
+                                </div>
+                                <div class="tip-content">
+                                    <h4>Gunakan Waktu Istirahat</h4>
+                                    <p>Manfaatkan waktu istirahat untuk meregangkan badan, minum air, atau berjalan sebentar.</p>
+                                </div>
+                            </div>
+                            <div class="pomodoro-tip">
+                                <div class="tip-icon">
+                                    <i class="fas fa-check-circle"></i>
+                                </div>
+                                <div class="tip-content">
+                                    <h4>Review Progress</h4>
+                                    <p>Setelah 4 sesi, evaluasi progress dan sesuaikan rencana belajar jika diperlukan.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Task Integration Section -->
+            <div class="pomodoro-task-integration">
+                <div class="feature-card task-integration-card">
+                    <div class="section-header">
+                        <h3><i class="fas fa-tasks"></i> Tugas untuk Sesi Ini</h3>
+                        <a href="todo.html" class="btn-link">Kelola Tugas <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                    <div class="task-selection">
+                        <select id="taskSelect" class="task-select">
+                            <option value="">Pilih tugas untuk fokus...</option>
+                            <option value="matematika">Matematika - Bab Trigonometri</option>
+                            <option value="fisika">Fisika - Hukum Newton</option>
+                            <option value="kimia">Kimia - Stoikiometri</option>
+                            <option value="bahasa">Bahasa Indonesia - Menulis Esai</option>
+                        </select>
+                        <button id="startTask" class="btn btn-primary">
+                            <i class="fas fa-play"></i> Mulai dengan Tugas
+                        </button>
+                    </div>
+                    <div class="current-task" id="currentTaskDisplay">
+                        <div class="no-task-message">
+                            <i class="fas fa-info-circle"></i>
+                            <p>Belum ada tugas yang dipilih. Pilih tugas untuk melacak progress belajar Anda.</p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </main>
+
+    <!-- Install Prompt -->
+    <div id="installPrompt" class="install-prompt">
+        <div class="install-content">
+            <div class="install-icon">
+                <i class="fas fa-brain"></i>
+            </div>
+            <div class="install-text">
+                <h4>Install StudyFocus</h4>
+                <p>Dapatkan pengalaman seperti aplikasi native</p>
+            </div>
+            <div class="install-actions">
+                <button id="installCancel" class="btn btn-outline">Nanti</button>
+                <button id="installConfirm" class="btn btn-primary">Install</button>
+            </div>
+        </div>
+    </div>
 
     <script src="script.js"></script>
 </body>

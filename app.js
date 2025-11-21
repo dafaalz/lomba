@@ -471,3 +471,322 @@ class EnhancedStudyFocusApp {
 document.addEventListener('DOMContentLoaded', () => {
     window.studyFocusApp = new EnhancedStudyFocusApp();
 });
+
+// Pomodoro Timer Functionality
+class PomodoroTimer {
+    constructor() {
+        this.minutes = 25;
+        this.seconds = 0;
+        this.isRunning = false;
+        this.mode = 'focus'; // focus, shortBreak, longBreak
+        this.interval = null;
+        this.completedSessions = 0;
+        this.totalSessions = 0;
+        this.totalMinutes = 0;
+        
+        this.modeDurations = {
+            focus: 25,
+            shortBreak: 5,
+            longBreak: 15
+        };
+        
+        this.init();
+    }
+    
+    init() {
+        this.setupEventListeners();
+        this.updateDisplay();
+        this.loadStats();
+    }
+    
+    setupEventListeners() {
+        // Timer controls
+        document.getElementById('startTimer').addEventListener('click', () => this.start());
+        document.getElementById('pauseTimer').addEventListener('click', () => this.pause());
+        document.getElementById('resetTimer').addEventListener('click', () => this.reset());
+        
+        // Mode buttons
+        document.querySelectorAll('.mode-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const mode = e.currentTarget.dataset.mode;
+                this.switchMode(mode);
+            });
+        });
+        
+        // Task integration
+        document.getElementById('startTask').addEventListener('click', () => {
+            this.startWithTask();
+        });
+    }
+    
+    start() {
+        if (this.isRunning) return;
+        
+        this.isRunning = true;
+        document.getElementById('startTimer').disabled = true;
+        document.getElementById('pauseTimer').disabled = false;
+        
+        this.interval = setInterval(() => {
+            this.tick();
+        }, 1000);
+        
+        this.updateButtonStates();
+    }
+    
+    pause() {
+        if (!this.isRunning) return;
+        
+        this.isRunning = false;
+        document.getElementById('startTimer').disabled = false;
+        document.getElementById('pauseTimer').disabled = true;
+        
+        clearInterval(this.interval);
+        this.updateButtonStates();
+    }
+    
+    reset() {
+        this.pause();
+        this.minutes = this.modeDurations[this.mode];
+        this.seconds = 0;
+        this.updateDisplay();
+        this.updateProgressRing();
+    }
+    
+    tick() {
+        if (this.seconds > 0) {
+            this.seconds--;
+        } else if (this.minutes > 0) {
+            this.minutes--;
+            this.seconds = 59;
+        } else {
+            // Timer completed
+            this.completeSession();
+            return;
+        }
+        
+        this.updateDisplay();
+        this.updateProgressRing();
+    }
+    
+    completeSession() {
+        this.pause();
+        
+        // Update stats
+        if (this.mode === 'focus') {
+            this.completedSessions++;
+            this.totalSessions++;
+            this.totalMinutes += this.modeDurations.focus;
+            
+            // Update UI
+            document.getElementById('todayPomodoroSessions').textContent = this.totalSessions;
+            document.getElementById('todayPomodoroMinutes').textContent = this.totalMinutes;
+            
+            // Show notification
+            this.showNotification('Sesi fokus selesai! Waktu untuk istirahat.', 'success');
+            
+            // Switch to break after focus session
+            if (this.completedSessions % 4 === 0) {
+                this.switchMode('longBreak');
+            } else {
+                this.switchMode('shortBreak');
+            }
+        } else {
+            // Break completed, switch back to focus
+            this.switchMode('focus');
+            this.showNotification('Istirahat selesai! Siap untuk fokus kembali.', 'info');
+        }
+        
+        this.saveStats();
+        this.updateSessionCounter();
+    }
+    
+    switchMode(mode) {
+        this.mode = mode;
+        this.minutes = this.modeDurations[mode];
+        this.seconds = 0;
+        
+        // Update active mode button
+        document.querySelectorAll('.mode-btn').forEach(btn => {
+            btn.classList.remove('active');
+            if (btn.dataset.mode === mode) {
+                btn.classList.add('active');
+            }
+        });
+        
+        // Update timer status
+        const statusMap = {
+            focus: 'Mode Fokus',
+            shortBreak: 'Istirahat Pendek',
+            longBreak: 'Istirahat Panjang'
+        };
+        document.getElementById('timerStatus').textContent = statusMap[mode];
+        
+        this.updateDisplay();
+        this.updateProgressRing();
+        this.updateButtonStates();
+    }
+    
+    updateDisplay() {
+        const timerElement = document.getElementById('timer');
+        const minutesStr = this.minutes.toString().padStart(2, '0');
+        const secondsStr = this.seconds.toString().padStart(2, '0');
+        timerElement.textContent = `${minutesStr}:${secondsStr}`;
+    }
+    
+    updateProgressRing() {
+        const totalSeconds = this.modeDurations[this.mode] * 60;
+        const remainingSeconds = this.minutes * 60 + this.seconds;
+        const progress = (totalSeconds - remainingSeconds) / totalSeconds;
+        
+        const circle = document.querySelector('.progress-ring-circle');
+        const radius = 140;
+        const circumference = 2 * Math.PI * radius;
+        const offset = circumference - (progress * circumference);
+        
+        circle.style.strokeDasharray = `${circumference} ${circumference}`;
+        circle.style.strokeDashoffset = offset;
+    }
+    
+    updateSessionCounter() {
+        const sessionCounter = document.getElementById('sessionCounter');
+        sessionCounter.textContent = `Sesi: ${this.completedSessions}/4`;
+    }
+    
+    updateButtonStates() {
+        const startBtn = document.getElementById('startTimer');
+        const pauseBtn = document.getElementById('pauseTimer');
+        
+        if (this.isRunning) {
+            startBtn.disabled = true;
+            pauseBtn.disabled = false;
+        } else {
+            startBtn.disabled = false;
+            pauseBtn.disabled = true;
+        }
+    }
+    
+    startWithTask() {
+        const taskSelect = document.getElementById('taskSelect');
+        const selectedTask = taskSelect.value;
+        
+        if (!selectedTask) {
+            this.showNotification('Pilih tugas terlebih dahulu!', 'warning');
+            return;
+        }
+        
+        // Update current task display
+        const taskDisplay = document.getElementById('currentTaskDisplay');
+        const taskText = taskSelect.options[taskSelect.selectedIndex].text;
+        
+        taskDisplay.innerHTML = `
+            <div class="active-task">
+                <div class="task-header">
+                    <i class="fas fa-tasks"></i>
+                    <h4>Tugas Aktif</h4>
+                </div>
+                <p class="task-name">${taskText}</p>
+                <div class="task-progress">
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 0%"></div>
+                    </div>
+                    <span class="progress-text">0%</span>
+                </div>
+            </div>
+        `;
+        
+        this.showNotification(`Memulai sesi Pomodoro untuk: ${taskText}`, 'success');
+        this.start();
+    }
+    
+    showNotification(message, type = 'info') {
+        // Create notification element
+        const notification = document.createElement('div');
+        notification.className = `notification ${type}`;
+        notification.innerHTML = `
+            <div class="notification-content">
+                <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'warning' ? 'exclamation-triangle' : 'info-circle'}"></i>
+                <p>${message}</p>
+            </div>
+            <button class="notification-close">
+                <i class="fas fa-times"></i>
+            </button>
+        `;
+        
+        document.body.appendChild(notification);
+        
+        // Add close functionality
+        const closeBtn = notification.querySelector('.notification-close');
+        closeBtn.addEventListener('click', () => {
+            notification.remove();
+        });
+        
+        // Remove notification after 5 seconds
+        setTimeout(() => {
+            if (notification.parentNode) {
+                notification.remove();
+            }
+        }, 5000);
+    }
+    
+    loadStats() {
+        const savedStats = localStorage.getItem('pomodoroStats');
+        if (savedStats) {
+            const stats = JSON.parse(savedStats);
+            this.totalSessions = stats.totalSessions || 0;
+            this.totalMinutes = stats.totalMinutes || 0;
+            
+            // Update UI
+            document.getElementById('todayPomodoroSessions').textContent = this.totalSessions;
+            document.getElementById('todayPomodoroMinutes').textContent = this.totalMinutes;
+            
+            // Calculate streak (simplified)
+            const lastUsed = localStorage.getItem('pomodoroLastUsed');
+            const today = new Date().toDateString();
+            
+            if (lastUsed === today) {
+                const currentStreak = parseInt(localStorage.getItem('pomodoroStreak') || '0');
+                document.getElementById('currentStreak').textContent = currentStreak;
+            }
+        }
+    }
+    
+    saveStats() {
+        const stats = {
+            totalSessions: this.totalSessions,
+            totalMinutes: this.totalMinutes
+        };
+        
+        localStorage.setItem('pomodoroStats', JSON.stringify(stats));
+        
+        // Update streak
+        const today = new Date().toDateString();
+        const lastUsed = localStorage.getItem('pomodoroLastUsed');
+        
+        if (lastUsed !== today) {
+            let streak = parseInt(localStorage.getItem('pomodoroStreak') || '0');
+            
+            // Check if yesterday was also used
+            const yesterday = new Date();
+            yesterday.setDate(yesterday.getDate() - 1);
+            const yesterdayStr = yesterday.toDateString();
+            
+            if (lastUsed === yesterdayStr) {
+                streak++;
+            } else {
+                streak = 1;
+            }
+            
+            localStorage.setItem('pomodoroStreak', streak.toString());
+            localStorage.setItem('pomodoroLastUsed', today);
+            
+            document.getElementById('currentStreak').textContent = streak;
+        }
+    }
+}
+
+// Initialize Pomodoro Timer when page loads
+document.addEventListener('DOMContentLoaded', () => {
+    if (document.querySelector('.pomodoro-page')) {
+        window.pomodoroTimer = new PomodoroTimer();
+    }
+});
