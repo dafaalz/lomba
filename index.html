@@ -3,10 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>StudyFocus - Tingkatkan Produktivitas Belajar Anda</title>
+    <title>StudyFocus - Platform Produktivitas Belajar Modern</title>
+    <meta name="description" content="Platform produktivitas belajar dengan Pomodoro Timer, To-Do List, Statistik, dan fitur pembelajaran lainnya">
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- PWA Meta Tags -->
+    <meta name="theme-color" content="#6C63FF">
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="icons/icon-192x192.png">
 </head>
 <body>
     <!-- Navigation -->
@@ -23,9 +28,19 @@
                 <a href="dashboard.html" class="nav-link">Dashboard</a>
                 <a href="pomodoro.html" class="nav-link">Pomodoro</a>
                 <a href="todo.html" class="nav-link">To-Do List</a>
+                <a href="calendar.html" class="nav-link">Kalender</a>
+                <a href="flashcards.html" class="nav-link">Flashcards</a>
                 <a href="stats.html" class="nav-link">Statistik</a>
+                <a href="focus.html" class="nav-link">Mode Fokus</a>
+                <div class="nav-user" id="navUser">
+                    <a href="login.html" class="btn btn-outline btn-small" id="loginBtn">Masuk</a>
+                    <a href="register.html" class="btn btn-primary btn-small" id="registerBtn">Daftar</a>
+                </div>
             </div>
             <div class="nav-actions">
+                <button id="fullscreenToggle" class="theme-btn" title="Mode Layar Penuh">
+                    <i class="fas fa-expand"></i>
+                </button>
                 <button id="themeToggle" class="theme-btn">
                     <i class="fas fa-moon"></i>
                 </button>
@@ -42,11 +57,14 @@
     <section class="hero">
         <div class="hero-container">
             <div class="hero-content">
+                <div class="badge">
+                    <span>✨ Platform Belajar Terbaru</span>
+                </div>
                 <h1 class="hero-title">
                     Tingkatkan <span class="gradient-text">Produktivitas</span> Belajar Anda
                 </h1>
                 <p class="hero-description">
-                    StudyFocus membantu Anda belajar lebih efektif dengan teknik Pomodoro, manajemen tugas, dan pelacakan statistik yang komprehensif.
+                    StudyFocus membantu Anda belajar lebih efektif dengan teknik Pomodoro, manajemen tugas, flashcards, dan pelacakan statistik yang komprehensif.
                 </p>
                 <div class="hero-actions">
                     <a href="dashboard.html" class="btn btn-primary">
@@ -56,9 +74,58 @@
                     <a href="#features" class="btn btn-secondary">
                         <span>Pelajari Lebih Lanjut</span>
                     </a>
+                    <a href="#demo" class="btn btn-outline">
+                        <span>Lihat Demo</span>
+                        <i class="fas fa-play"></i>
+                    </a>
+                </div>
+                <div class="hero-stats">
+                    <div class="stat">
+                        <span class="stat-number">10K+</span>
+                        <span class="stat-label">Pengguna Aktif</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-number">500K+</span>
+                        <span class="stat-label">Sesi Belajar</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-number">98%</span>
+                        <span class="stat-label">Tingkat Kepuasan</span>
+                    </div>
                 </div>
             </div>
             <div class="hero-visual">
+                <div class="app-preview">
+                    <div class="preview-header">
+                        <div class="preview-dots">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </div>
+                    </div>
+                    <div class="preview-content">
+                        <div class="preview-timer">
+                            <div class="timer-circle">
+                                <span>25:00</span>
+                            </div>
+                            <div class="timer-status">Fokus Session</div>
+                        </div>
+                        <div class="preview-tasks">
+                            <div class="task-item completed">
+                                <i class="fas fa-check-circle"></i>
+                                <span>Matematika - Bab 1</span>
+                            </div>
+                            <div class="task-item active">
+                                <i class="far fa-circle"></i>
+                                <span>Fisika - Gerak Lurus</span>
+                            </div>
+                            <div class="task-item">
+                                <i class="far fa-circle"></i>
+                                <span>Kimia - Stoikiometri</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <div class="floating-card card-1">
                     <i class="fas fa-clock"></i>
                     <h3>Pomodoro Timer</h3>
@@ -97,68 +164,264 @@
                     </div>
                     <h3>Pomodoro Timer</h3>
                     <p>Teknik manajemen waktu yang terbukti meningkatkan fokus dan efisiensi belajar dengan siklus 25 menit fokus dan 5 menit istirahat.</p>
+                    <a href="pomodoro.html" class="feature-link">Coba Sekarang <i class="fas fa-arrow-right"></i></a>
                 </div>
                 <div class="feature-card">
                     <div class="feature-icon">
                         <i class="fas fa-tasks"></i>
                     </div>
-                    <h3>To-Do List</h3>
-                    <p>Kelola daftar tugas belajar Anda dengan fitur tambah, edit, hapus, dan tandai selesai. Semua data tersimpan secara lokal.</p>
+                    <h3>To-Do List Cerdas</h3>
+                    <p>Kelola daftar tugas belajar Anda dengan fitur prioritas, kategori, dan pengingat. Semua data tersimpan secara lokal.</p>
+                    <a href="todo.html" class="feature-link">Coba Sekarang <i class="fas fa-arrow-right"></i></a>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-calendar-alt"></i>
+                    </div>
+                    <h3>Kalender Belajar</h3>
+                    <p>Rencanakan sesi belajar Anda dengan kalender interaktif. Atur jadwal dan target belajar harian, mingguan, dan bulanan.</p>
+                    <a href="calendar.html" class="feature-link">Coba Sekarang <i class="fas fa-arrow-right"></i></a>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-layer-group"></i>
+                    </div>
+                    <h3>Flashcards</h3>
+                    <p>Buat dan gunakan flashcards digital untuk menguasai konsep-konsep penting dengan teknik pengulangan spasial.</p>
+                    <a href="flashcards.html" class="feature-link">Coba Sekarang <i class="fas fa-arrow-right"></i></a>
                 </div>
                 <div class="feature-card">
                     <div class="feature-icon">
                         <i class="fas fa-chart-bar"></i>
                     </div>
-                    <h3>Statistik Belajar</h3>
-                    <p>Pantau progress belajar harian dan mingguan dengan grafik visual dan progress bar yang informatif.</p>
+                    <h3>Statistik Mendalam</h3>
+                    <p>Pantau progress belajar harian dan mingguan dengan grafik visual dan analitik yang mendalam untuk meningkatkan produktivitas.</p>
+                    <a href="stats.html" class="feature-link">Coba Sekarang <i class="fas fa-arrow-right"></i></a>
                 </div>
                 <div class="feature-card">
                     <div class="feature-icon">
-                        <i class="fas fa-sticky-note"></i>
+                        <i class="fas fa-volume-up"></i>
                     </div>
-                    <h3>Catatan Cepat</h3>
-                    <p>Buat catatan belajar singkat yang tersimpan otomatis. Ideal untuk mencatat poin-poin penting saat belajar.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-palette"></i>
-                    </div>
-                    <h3>Mode Gelap/Terang</h3>
-                    <p>Pilih tema yang nyaman untuk mata Anda. Preferensi tema tersimpan otomatis untuk kenyamanan penggunaan.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-mobile-alt"></i>
-                    </div>
-                    <h3>Responsif</h3>
-                    <p>Akses dari perangkat apapun. Website dirancang untuk tampil optimal di desktop, tablet, dan smartphone.</p>
+                    <h3>White Noise & Fokus</h3>
+                    <p>Tingkatkan konsentrasi dengan berbagai suara ambient, white noise, dan musik fokus yang dapat disesuaikan.</p>
+                    <a href="focus.html" class="feature-link">Coba Sekarang <i class="fas fa-arrow-right"></i></a>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- How It Works Section -->
-    <section class="how-it-works">
+    <!-- Demo Section -->
+    <section id="demo" class="demo">
         <div class="container">
             <div class="section-header">
-                <h2>Bagaimana Cara Kerjanya?</h2>
-                <p>Tiga langkah sederhana menuju produktivitas belajar yang lebih baik</p>
+                <h2>Lihat StudyFocus dalam Aksi</h2>
+                <p>Jelajahi fitur-fitur utama platform kami</p>
             </div>
-            <div class="steps">
-                <div class="step">
-                    <div class="step-number">1</div>
-                    <h3>Buat Rencana Belajar</h3>
-                    <p>Gunakan To-Do List untuk merencanakan tugas belajar Anda</p>
+            <div class="demo-container">
+                <div class="demo-tabs">
+                    <button class="demo-tab active" data-tab="pomodoro">Pomodoro Timer</button>
+                    <button class="demo-tab" data-tab="todo">To-Do List</button>
+                    <button class="demo-tab" data-tab="stats">Statistik</button>
+                    <button class="demo-tab" data-tab="focus">Mode Fokus</button>
                 </div>
-                <div class="step">
-                    <div class="step-number">2</div>
-                    <h3>Gunakan Pomodoro Timer</h3>
-                    <p>Atur waktu fokus 25 menit dan istirahat 5 menit untuk efisiensi maksimal</p>
+                <div class="demo-content">
+                    <div class="demo-panel active" id="pomodoro-demo">
+                        <div class="demo-visual">
+                            <div class="pomodoro-demo">
+                                <div class="timer-demo">
+                                    <span>25:00</span>
+                                </div>
+                                <div class="demo-controls">
+                                    <button class="btn btn-small">Mulai</button>
+                                    <button class="btn btn-small btn-secondary">Jeda</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="demo-info">
+                            <h3>Pomodoro Timer yang Efektif</h3>
+                            <p>Gunakan teknik Pomodoro yang terbukti meningkatkan fokus dan retensi informasi. Atur durasi sesi sesuai kebutuhan Anda.</p>
+                            <ul>
+                                <li><i class="fas fa-check"></i> Sesi fokus 25 menit dengan istirahat 5 menit</li>
+                                <li><i class="fas fa-check"></i> Istirahat panjang setelah 4 sesi</li>
+                                <li><i class="fas fa-check"></i> Pelacakan statistik otomatis</li>
+                                <li><i class="fas fa-check"></i> Notifikasi dan pengingat</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="demo-panel" id="todo-demo">
+                        <div class="demo-visual">
+                            <div class="todo-demo">
+                                <div class="todo-input-demo">
+                                    <input type="text" placeholder="Tambah tugas baru...">
+                                    <button class="btn btn-small">Tambah</button>
+                                </div>
+                                <div class="todo-list-demo">
+                                    <div class="todo-item-demo completed">
+                                        <i class="fas fa-check-circle"></i>
+                                        <span>Mengerjakan soal matematika</span>
+                                    </div>
+                                    <div class="todo-item-demo active">
+                                        <i class="far fa-circle"></i>
+                                        <span>Membaca bab fisika</span>
+                                    </div>
+                                    <div class="todo-item-demo">
+                                        <i class="far fa-circle"></i>
+                                        <span>Membuat rangkuman kimia</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="demo-info">
+                            <h3>To-Do List yang Terorganisir</h3>
+                            <p>Kelola semua tugas belajar Anda di satu tempat. Tambahkan prioritas, kategori, dan tenggat waktu untuk tetap terorganisir.</p>
+                            <ul>
+                                <li><i class="fas fa-check"></i> Kategorisasi tugas</li>
+                                <li><i class="fas fa-check"></i> Sistem prioritas</li>
+                                <li><i class="fas fa-check"></i> Pengingat dan notifikasi</li>
+                                <li><i class="fas fa-check"></i> Sinkronisasi antar perangkat</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- Demo panels lainnya -->
                 </div>
-                <div class="step">
-                    <div class="step-number">3</div>
-                    <h3>Pantau Progress</h3>
-                    <p>Lihat statistik belajar Anda dan tingkatkan produktivitas dari waktu ke waktu</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="testimonials">
+        <div class="container">
+            <div class="section-header">
+                <h2>Apa Kata Pengguna Kami</h2>
+                <p>StudyFocus telah membantu ribuan pelajar meningkatkan produktivitas mereka</p>
+            </div>
+            <div class="testimonials-grid">
+                <div class="testimonial-card">
+                    <div class="testimonial-content">
+                        <p>"StudyFocus telah mengubah cara saya belajar. Saya sekarang bisa fokus lebih lama dan menyelesaikan lebih banyak tugas."</p>
+                    </div>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">
+                            <img src="https://i.pravatar.cc/100?img=1" alt="Avatar">
+                        </div>
+                        <div class="author-info">
+                            <h4>Rina Santoso</h4>
+                            <span>Mahasiswa Kedokteran</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="testimonial-content">
+                        <p>"Fitur Pomodoro dan statistik membantu saya mengidentifikasi pola belajar terbaik. Produktivitas saya meningkat 40%!"</p>
+                    </div>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">
+                            <img src="https://i.pravatar.cc/100?img=2" alt="Avatar">
+                        </div>
+                        <div class="author-info">
+                            <h4>Andi Wijaya</h4>
+                            <span>Pelajar SMA</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="testimonial-content">
+                        <p>"Saya suka fitur flashcards untuk menghafal rumus dan konsep. Sangat membantu untuk persiapan ujian."</p>
+                    </div>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">
+                            <img src="https://i.pravatar.cc/100?img=3" alt="Avatar">
+                        </div>
+                        <div class="author-info">
+                            <h4>Sari Dewi</h4>
+                            <span>Mahasiswa Teknik</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section class="pricing">
+        <div class="container">
+            <div class="section-header">
+                <h2>Pilih Paket yang Tepat untuk Anda</h2>
+                <p>Semua fitur dasar gratis selamanya. Upgrade untuk fitur premium</p>
+            </div>
+            <div class="pricing-grid">
+                <div class="pricing-card">
+                    <div class="pricing-header">
+                        <h3>Gratis</h3>
+                        <div class="price">
+                            <span class="currency">Rp</span>
+                            <span class="amount">0</span>
+                            <span class="period">/selamanya</span>
+                        </div>
+                    </div>
+                    <div class="pricing-features">
+                        <ul>
+                            <li><i class="fas fa-check"></i> Pomodoro Timer Dasar</li>
+                            <li><i class="fas fa-check"></i> To-Do List (maks. 50 tugas)</li>
+                            <li><i class="fas fa-check"></i> Statistik 7 hari terakhir</li>
+                            <li><i class="fas fa-check"></i> 5 Flashcard sets</li>
+                            <li><i class="fas fa-times"></i> Kalender Belajar</li>
+                            <li><i class="fas fa-times"></i> Mode Fokus Lengkap</li>
+                            <li><i class="fas fa-times"></i> Ekspor Data</li>
+                        </ul>
+                    </div>
+                    <div class="pricing-actions">
+                        <a href="register.html" class="btn btn-outline btn-block">Mulai Gratis</a>
+                    </div>
+                </div>
+                <div class="pricing-card featured">
+                    <div class="pricing-badge">Populer</div>
+                    <div class="pricing-header">
+                        <h3>Pro</h3>
+                        <div class="price">
+                            <span class="currency">Rp</span>
+                            <span class="amount">49.000</span>
+                            <span class="period">/bulan</span>
+                        </div>
+                    </div>
+                    <div class="pricing-features">
+                        <ul>
+                            <li><i class="fas fa-check"></i> Semua fitur Gratis</li>
+                            <li><i class="fas fa-check"></i> To-Do List tanpa batas</li>
+                            <li><i class="fas fa-check"></i> Statistik tanpa batas waktu</li>
+                            <li><i class="fas fa-check"></i> Flashcard tanpa batas</li>
+                            <li><i class="fas fa-check"></i> Kalender Belajar Lengkap</li>
+                            <li><i class="fas fa-check"></i> Mode Fokus Lengkap</li>
+                            <li><i class="fas fa-check"></i> Ekspor Data</li>
+                        </ul>
+                    </div>
+                    <div class="pricing-actions">
+                        <a href="register.html" class="btn btn-primary btn-block">Upgrade Sekarang</a>
+                    </div>
+                </div>
+                <div class="pricing-card">
+                    <div class="pricing-header">
+                        <h3>Tim</h3>
+                        <div class="price">
+                            <span class="currency">Rp</span>
+                            <span class="amount">99.000</span>
+                            <span class="period">/bulan</span>
+                        </div>
+                    </div>
+                    <div class="pricing-features">
+                        <ul>
+                            <li><i class="fas fa-check"></i> Semua fitur Pro</li>
+                            <li><i class="fas fa-check"></i> Hingga 5 pengguna</li>
+                            <li><i class="fas fa-check"></i> Berbagi tugas dan progress</li>
+                            <li><i class="fas fa-check"></i> Flashcard bersama</li>
+                            <li><i class="fas fa-check"></i> Leaderboard grup</li>
+                            <li><i class="fas fa-check"></i> Prioritas dukungan</li>
+                            <li><i class="fas fa-check"></i> Fitur kolaborasi</li>
+                        </ul>
+                    </div>
+                    <div class="pricing-actions">
+                        <a href="register.html" class="btn btn-outline btn-block">Pilih Tim</a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -169,11 +432,20 @@
         <div class="container">
             <div class="cta-content">
                 <h2>Siap Meningkatkan Produktivitas Belajar Anda?</h2>
-                <p>Mulai perjalanan belajar yang lebih fokus dan terorganisir hari ini</p>
-                <a href="dashboard.html" class="btn btn-primary btn-large">
-                    <span>Coba Sekarang - Gratis!</span>
-                    <i class="fas fa-rocket"></i>
-                </a>
+                <p>Bergabung dengan ribuan pelajar yang telah meningkatkan hasil belajar mereka dengan StudyFocus</p>
+                <div class="cta-actions">
+                    <a href="register.html" class="btn btn-primary btn-large">
+                        <span>Daftar Sekarang - Gratis!</span>
+                        <i class="fas fa-rocket"></i>
+                    </a>
+                    <a href="demo.html" class="btn btn-secondary btn-large">
+                        <span>Coba Demo Interaktif</span>
+                        <i class="fas fa-play"></i>
+                    </a>
+                </div>
+                <div class="cta-footer">
+                    <p>Tidak perlu kartu kredit. Mulai dalam 30 detik.</p>
+                </div>
             </div>
         </div>
     </section>
@@ -193,43 +465,89 @@
                         <a href="#"><i class="fab fa-facebook"></i></a>
                         <a href="#"><i class="fab fa-instagram"></i></a>
                         <a href="#"><i class="fab fa-linkedin"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
                     </div>
                 </div>
                 <div class="footer-section">
-                    <h3>Menu</h3>
+                    <h3>Produk</h3>
                     <ul>
-                        <li><a href="index.html">Beranda</a></li>
-                        <li><a href="dashboard.html">Dashboard</a></li>
                         <li><a href="pomodoro.html">Pomodoro Timer</a></li>
                         <li><a href="todo.html">To-Do List</a></li>
+                        <li><a href="calendar.html">Kalender Belajar</a></li>
+                        <li><a href="flashcards.html">Flashcards</a></li>
+                        <li><a href="focus.html">Mode Fokus</a></li>
                         <li><a href="stats.html">Statistik</a></li>
                     </ul>
                 </div>
                 <div class="footer-section">
-                    <h3>Fitur</h3>
+                    <h3>Perusahaan</h3>
                     <ul>
-                        <li><a href="#">Pomodoro Timer</a></li>
-                        <li><a href="#">To-Do List</a></li>
-                        <li><a href="#">Statistik Belajar</a></li>
-                        <li><a href="#">Catatan Cepat</a></li>
-                        <li><a href="#">Mode Gelap</a></li>
+                        <li><a href="about.html">Tentang Kami</a></li>
+                        <li><a href="blog.html">Blog</a></li>
+                        <li><a href="careers.html">Karir</a></li>
+                        <li><a href="press.html">Press</a></li>
+                        <li><a href="contact.html">Kontak</a></li>
                     </ul>
                 </div>
                 <div class="footer-section">
-                    <h3>Kontak</h3>
+                    <h3>Bantuan</h3>
                     <ul>
-                        <li><i class="fas fa-envelope"></i> hello@studyfocus.com</li>
-                        <li><i class="fas fa-phone"></i> +62 123 4567 890</li>
-                        <li><i class="fas fa-map-marker-alt"></i> Jakarta, Indonesia</li>
+                        <li><a href="help.html">Pusat Bantuan</a></li>
+                        <li><a href="faq.html">FAQ</a></li>
+                        <li><a href="privacy.html">Kebijakan Privasi</a></li>
+                        <li><a href="terms.html">Syarat & Ketentuan</a></li>
+                        <li><a href="support.html">Dukungan</a></li>
                     </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Download</h3>
+                    <div class="download-buttons">
+                        <a href="#" class="download-btn">
+                            <i class="fab fa-apple"></i>
+                            <div>
+                                <span>Download on the</span>
+                                <strong>App Store</strong>
+                            </div>
+                        </a>
+                        <a href="#" class="download-btn">
+                            <i class="fab fa-google-play"></i>
+                            <div>
+                                <span>Get it on</span>
+                                <strong>Google Play</strong>
+                            </div>
+                        </a>
+                    </div>
                 </div>
             </div>
             <div class="footer-bottom">
                 <p>&copy; 2023 StudyFocus. All rights reserved.</p>
+                <div class="footer-links">
+                    <a href="privacy.html">Privasi</a>
+                    <a href="terms.html">Syarat</a>
+                    <a href="sitemap.html">Sitemap</a>
+                </div>
             </div>
         </div>
     </footer>
 
+    <!-- Install Prompt -->
+    <div id="installPrompt" class="install-prompt">
+        <div class="install-content">
+            <div class="install-icon">
+                <i class="fas fa-brain"></i>
+            </div>
+            <div class="install-text">
+                <h4>Install StudyFocus</h4>
+                <p>Dapatkan pengalaman seperti aplikasi native</p>
+            </div>
+            <div class="install-actions">
+                <button id="installCancel" class="btn btn-outline">Nanti</button>
+                <button id="installConfirm" class="btn btn-primary">Install</button>
+            </div>
+        </div>
+    </div>
+
     <script src="script.js"></script>
+    <script src="pwa.js"></script>
 </body>
 </html>
