@@ -26,6 +26,9 @@
                 <a href="stats.html" class="nav-link">Statistik</a>
             </div>
             <div class="nav-actions">
+                <button id="fullscreenToggle" class="theme-btn" title="Mode Layar Penuh">
+                    <i class="fas fa-expand"></i>
+                </button>
                 <button id="themeToggle" class="theme-btn">
                     <i class="fas fa-moon"></i>
                 </button>
@@ -39,46 +42,65 @@
     </nav>
 
     <main class="dashboard-page">
+        <!-- Background Gradient Circles -->
+        <div class="dashboard-background">
+            <div class="gradient-circle circle-1"></div>
+            <div class="gradient-circle circle-2"></div>
+            <div class="gradient-circle circle-3"></div>
+        </div>
+
         <div class="container">
-            <div class="page-header">
-                <h1>Dashboard</h1>
-                <p>Ringkasan produktivitas belajar Anda hari ini</p>
+            <!-- Header dengan gaya hero section -->
+            <div class="dashboard-header">
+                <div class="badge">
+                    <span>✨ Dashboard Produktivitas</span>
+                </div>
+                <h1 class="dashboard-title">
+                    Ringkasan <span class="gradient-text">Produktivitas</span> Anda
+                </h1>
+                <p class="dashboard-description">
+                    Pantau progress belajar dan tingkatkan produktivitas dengan tools yang tersedia.
+                </p>
             </div>
 
-            <div class="dashboard-grid">
-                <!-- Statistik Cepat -->
-                <section class="dashboard-section quick-stats">
-                    <h2>Statistik Hari Ini</h2>
-                    <div class="stats-grid">
-                        <div class="stat-card">
-                            <div class="stat-icon">
+            <!-- Grid Dashboard yang Diperbarui -->
+            <div class="dashboard-grid-revamped">
+                <!-- Statistik Cepat - Diperbarui dengan gaya feature-card -->
+                <section class="dashboard-section quick-stats-revamped">
+                    <h2><i class="fas fa-chart-line"></i> Statistik Hari Ini</h2>
+                    <div class="stats-grid-revamped">
+                        <div class="feature-card stat-card-revamped">
+                            <div class="feature-icon">
                                 <i class="fas fa-clock"></i>
                             </div>
                             <div class="stat-info">
                                 <h3>Sesi Pomodoro</h3>
                                 <div class="stat-value" id="todaySessions">0</div>
+                                <span class="stat-change positive">+2 dari kemarin</span>
                             </div>
                         </div>
-                        <div class="stat-card">
-                            <div class="stat-icon">
+                        <div class="feature-card stat-card-revamped">
+                            <div class="feature-icon">
                                 <i class="fas fa-hourglass-half"></i>
                             </div>
                             <div class="stat-info">
                                 <h3>Menit Fokus</h3>
                                 <div class="stat-value" id="todayMinutes">0</div>
+                                <span class="stat-change positive">+45 menit</span>
                             </div>
                         </div>
-                        <div class="stat-card">
-                            <div class="stat-icon">
+                        <div class="feature-card stat-card-revamped">
+                            <div class="feature-icon">
                                 <i class="fas fa-tasks"></i>
                             </div>
                             <div class="stat-info">
                                 <h3>Tugas Selesai</h3>
                                 <div class="stat-value" id="completedTasks">0</div>
+                                <span class="stat-change positive">80% selesai</span>
                             </div>
                         </div>
-                        <div class="stat-card">
-                            <div class="stat-icon">
+                        <div class="feature-card stat-card-revamped">
+                            <div class="feature-icon">
                                 <i class="fas fa-bullseye"></i>
                             </div>
                             <div class="stat-info">
@@ -89,58 +111,119 @@
                                     </div>
                                     <span class="progress-text" id="progressText">0%</span>
                                 </div>
+                                <span class="stat-change">Target: 5 sesi</span>
                             </div>
                         </div>
                     </div>
                 </section>
 
-                <!-- Pomodoro Timer Mini -->
-                <section class="dashboard-section pomodoro-mini">
-                    <h2>Pomodoro Timer</h2>
-                    <div class="pomodoro-card mini">
-                        <div class="timer-display">
+                <!-- Pomodoro Timer Mini - Diperbarui dengan gaya yang lebih modern -->
+                <section class="dashboard-section pomodoro-mini-revamped">
+                    <div class="section-header">
+                        <h2><i class="fas fa-clock"></i> Pomodoro Timer</h2>
+                        <a href="pomodoro.html" class="btn-link">Buka Lengkap <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                    <div class="feature-card pomodoro-card-revamped">
+                        <div class="timer-display-revamped">
                             <div class="timer" id="timer">25:00</div>
                             <div class="session-counter" id="sessionCounter">Sesi: 0</div>
                         </div>
-                        <div class="timer-controls">
-                            <button id="startTimer" class="btn btn-primary">Mulai</button>
-                            <button id="pauseTimer" class="btn btn-secondary" disabled>Jeda</button>
-                            <button id="resetTimer" class="btn btn-secondary">Reset</button>
+                        <div class="timer-controls-revamped">
+                            <button id="startTimer" class="btn btn-primary">
+                                <i class="fas fa-play"></i> Mulai
+                            </button>
+                            <button id="pauseTimer" class="btn btn-secondary" disabled>
+                                <i class="fas fa-pause"></i> Jeda
+                            </button>
+                            <button id="resetTimer" class="btn btn-outline">
+                                <i class="fas fa-redo"></i> Reset
+                            </button>
                         </div>
-                        <div class="timer-modes">
-                            <button class="mode-btn active" data-mode="focus">Fokus</button>
-                            <button class="mode-btn" data-mode="shortBreak">Istirahat Pendek</button>
-                            <button class="mode-btn" data-mode="longBreak">Istirahat Panjang</button>
-                        </div>
-                        <div class="pomodoro-actions">
-                            <a href="pomodoro.html" class="btn btn-outline">Buka Timer Lengkap</a>
+                        <div class="timer-modes-revamped">
+                            <button class="mode-btn active" data-mode="focus">
+                                <i class="fas fa-bullseye"></i> Fokus
+                            </button>
+                            <button class="mode-btn" data-mode="shortBreak">
+                                <i class="fas fa-coffee"></i> Pendek
+                            </button>
+                            <button class="mode-btn" data-mode="longBreak">
+                                <i class="fas fa-walking"></i> Panjang
+                            </button>
                         </div>
                     </div>
                 </section>
 
-                <!-- To-Do List Mini -->
-                <section class="dashboard-section todo-mini">
+                <!-- To-Do List Mini - Diperbarui dengan gaya yang konsisten -->
+                <section class="dashboard-section todo-mini-revamped">
                     <div class="section-header">
-                        <h2>To-Do List</h2>
-                        <a href="todo.html" class="btn-link">Lihat Semua</a>
+                        <h2><i class="fas fa-tasks"></i> To-Do List</h2>
+                        <a href="todo.html" class="btn-link">Lihat Semua <i class="fas fa-arrow-right"></i></a>
                     </div>
-                    <div class="todo-card mini">
-                        <div class="todo-input">
+                    <div class="feature-card todo-card-revamped">
+                        <div class="todo-input-revamped">
                             <input type="text" id="todoInput" placeholder="Tambah tugas belajar...">
-                            <button id="addTodo" class="btn btn-primary">Tambah</button>
+                            <button id="addTodo" class="btn btn-primary">
+                                <i class="fas fa-plus"></i>
+                            </button>
                         </div>
-                        <ul class="todo-list" id="todoList">
+                        <ul class="todo-list-revamped" id="todoList">
                             <!-- To-do items akan ditambahkan di sini -->
+                            <li class="empty-message">Belum ada tugas. Tambahkan tugas pertama Anda!</li>
                         </ul>
+                        <div class="todo-stats-revamped">
+                            <span id="remainingTasks">0 tugas tersisa</span>
+                        </div>
                     </div>
                 </section>
 
-                <!-- Catatan Cepat -->
-                <section class="dashboard-section quick-notes">
-                    <h2>Catatan Cepat</h2>
-                    <div class="notes-card">
+                <!-- Catatan Cepat - Diperbarui dengan gaya yang lebih menarik -->
+                <section class="dashboard-section quick-notes-revamped">
+                    <div class="section-header">
+                        <h2><i class="fas fa-sticky-note"></i> Catatan Cepat</h2>
+                        <span class="notes-info">Tersimpan otomatis</span>
+                    </div>
+                    <div class="feature-card notes-card-revamped">
                         <textarea id="quickNotes" placeholder="Tulis catatan belajar di sini..."></textarea>
-                        <div class="notes-info">Catatan tersimpan otomatis</div>
+                        <div class="notes-actions">
+                            <button class="btn btn-outline btn-small" id="clearNotes">
+                                <i class="fas fa-trash"></i> Hapus
+                            </button>
+                            <span class="notes-counter">0 karakter</span>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Pencapaian & Motivasi - Elemen baru untuk keselarasan dengan index -->
+                <section class="dashboard-section achievements-revamped">
+                    <h2><i class="fas fa-trophy"></i> Pencapaian Hari Ini</h2>
+                    <div class="achievements-grid">
+                        <div class="achievement-item">
+                            <div class="achievement-icon">
+                                <i class="fas fa-fire"></i>
+                            </div>
+                            <div class="achievement-info">
+                                <h3>Streak Belajar</h3>
+                                <p>3 hari berturut-turut</p>
+                            </div>
+                        </div>
+                        <div class="achievement-item">
+                            <div class="achievement-icon">
+                                <i class="fas fa-medal"></i>
+                            </div>
+                            <div class="achievement-info">
+                                <h3>Fokus Terjaga</h3>
+                                <p>5 sesi Pomodoro</p>
+                            </div>
+                        </div>
+                        <div class="achievement-item">
+                            <div class="achievement-icon">
+                                <i class="fas fa-check-double"></i>
+                            </div>
+                            <div class="achievement-info">
+                                <h3>Tugas Terselesaikan</h3>
+                                <p>8 dari 10 tugas</p>
+                            </div>
+                        </div>
                     </div>
                 </section>
             </div>
@@ -155,6 +238,23 @@
             <div class="modal-actions">
                 <button id="saveEdit" class="btn btn-primary">Simpan</button>
                 <button id="cancelEdit" class="btn btn-secondary">Batal</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Install Prompt -->
+    <div id="installPrompt" class="install-prompt">
+        <div class="install-content">
+            <div class="install-icon">
+                <i class="fas fa-brain"></i>
+            </div>
+            <div class="install-text">
+                <h4>Install StudyFocus</h4>
+                <p>Dapatkan pengalaman seperti aplikasi native</p>
+            </div>
+            <div class="install-actions">
+                <button id="installCancel" class="btn btn-outline">Nanti</button>
+                <button id="installConfirm" class="btn btn-primary">Install</button>
             </div>
         </div>
     </div>

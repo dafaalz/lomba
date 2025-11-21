@@ -2275,3 +2275,412 @@ section {
         gap: 5px;
     }
 }
+
+/* ===== DASHBOARD REVAMP STYLES ===== */
+.dashboard-page {
+    position: relative;
+    padding: 150px 0 100px;
+    overflow: hidden;
+}
+
+.dashboard-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    overflow: hidden;
+}
+
+.dashboard-header {
+    text-align: center;
+    margin-bottom: 60px;
+}
+
+.dashboard-title {
+    font-size: 3rem;
+    font-weight: 800;
+    line-height: 1.2;
+    margin-bottom: 20px;
+}
+
+.dashboard-description {
+    font-size: 1.2rem;
+    color: var(--text-muted);
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.dashboard-grid-revamped {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: auto auto;
+    gap: 30px;
+    grid-template-areas: 
+        "stats stats pomodoro"
+        "todo notes achievements";
+}
+
+.quick-stats-revamped {
+    grid-area: stats;
+}
+
+.pomodoro-mini-revamped {
+    grid-area: pomodoro;
+}
+
+.todo-mini-revamped {
+    grid-area: todo;
+}
+
+.quick-notes-revamped {
+    grid-area: notes;
+}
+
+.achievements-revamped {
+    grid-area: achievements;
+}
+
+/* Stats Revamp */
+.stats-grid-revamped {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+.stat-card-revamped {
+    text-align: center;
+    padding: 25px 20px;
+    transition: var(--transition);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.stat-card-revamped:hover {
+    transform: translateY(-5px);
+}
+
+.stat-card-revamped .feature-icon {
+    width: 70px;
+    height: 70px;
+    margin-bottom: 15px;
+}
+
+.stat-card-revamped .stat-info h3 {
+    font-size: 1rem;
+    margin-bottom: 10px;
+    color: var(--text-muted);
+}
+
+.stat-card-revamped .stat-value {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 5px;
+    color: var(--text-color);
+}
+
+.stat-change {
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+.stat-change.positive {
+    color: var(--success-color);
+}
+
+.stat-change.negative {
+    color: var(--danger-color);
+}
+
+/* Pomodoro Revamp */
+.pomodoro-card-revamped {
+    text-align: center;
+    padding: 25px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.timer-display-revamped {
+    margin-bottom: 20px;
+}
+
+.timer-controls-revamped {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.timer-modes-revamped {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+}
+
+.timer-modes-revamped .mode-btn {
+    flex: 1;
+    padding: 8px 12px;
+    font-size: 0.8rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+}
+
+/* Todo Revamp */
+.todo-card-revamped {
+    padding: 25px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.todo-input-revamped {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.todo-input-revamped input {
+    flex-grow: 1;
+    padding: 12px 15px;
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    background: var(--card-bg);
+    color: var(--text-color);
+    font-family: 'Poppins', sans-serif;
+    transition: var(--transition);
+}
+
+.todo-input-revamped input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.1);
+}
+
+.todo-list-revamped {
+    list-style: none;
+    flex-grow: 1;
+    overflow-y: auto;
+    max-height: 200px;
+    margin-bottom: 15px;
+}
+
+.todo-item-revamped {
+    display: flex;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border-color);
+    transition: var(--transition);
+}
+
+.todo-item-revamped:hover {
+    background: var(--hover-color);
+    margin: 0 -15px;
+    padding: 10px 15px;
+    border-radius: var(--border-radius);
+}
+
+.todo-item-revamped:last-child {
+    border-bottom: none;
+}
+
+.todo-checkbox-revamped {
+    margin-right: 15px;
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+    accent-color: var(--primary-color);
+}
+
+.todo-text-revamped {
+    flex-grow: 1;
+    font-size: 0.9rem;
+    text-align: left;
+}
+
+.todo-text-revamped.completed {
+    text-decoration: line-through;
+    color: var(--text-muted);
+}
+
+.todo-stats-revamped {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    text-align: center;
+    padding-top: 15px;
+    border-top: 1px solid var(--border-color);
+}
+
+/* Notes Revamp */
+.notes-card-revamped {
+    padding: 25px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.notes-card-revamped textarea {
+    flex-grow: 1;
+    width: 100%;
+    padding: 15px;
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    background: var(--card-bg);
+    color: var(--text-color);
+    font-family: 'Poppins', sans-serif;
+    resize: none;
+    transition: var(--transition);
+    min-height: 150px;
+    margin-bottom: 15px;
+}
+
+.notes-card-revamped textarea:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.1);
+}
+
+.notes-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.notes-counter {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+/* Achievements Revamp */
+.achievements-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.achievement-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 15px;
+    background: var(--bg-color);
+    border-radius: var(--border-radius);
+    border: 1px solid var(--border-color);
+    transition: var(--transition);
+}
+
+.achievement-item:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--box-shadow);
+}
+
+.achievement-icon {
+    width: 50px;
+    height: 50px;
+    background: var(--gradient);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.2rem;
+}
+
+.achievement-info h3 {
+    font-size: 1rem;
+    margin-bottom: 5px;
+}
+
+.achievement-info p {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+/* Section Header Revamp */
+.dashboard-section h2 {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.3rem;
+    margin-bottom: 20px;
+    color: var(--text-color);
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .dashboard-grid-revamped {
+        grid-template-columns: 1fr 1fr;
+        grid-template-areas: 
+            "stats stats"
+            "pomodoro todo"
+            "notes achievements";
+    }
+    
+    .dashboard-title {
+        font-size: 2.5rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .dashboard-grid-revamped {
+        grid-template-columns: 1fr;
+        grid-template-areas: 
+            "stats"
+            "pomodoro"
+            "todo"
+            "notes"
+            "achievements";
+    }
+    
+    .dashboard-title {
+        font-size: 2rem;
+    }
+    
+    .stats-grid-revamped {
+        grid-template-columns: 1fr;
+    }
+    
+    .timer-controls-revamped {
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+    
+    .timer-modes-revamped {
+        flex-wrap: wrap;
+    }
+}
+
+@media (max-width: 480px) {
+    .dashboard-page {
+        padding: 120px 0 60px;
+    }
+    
+    .dashboard-title {
+        font-size: 1.8rem;
+    }
+    
+    .section-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+    
+    .timer-controls-revamped .btn {
+        flex: 1;
+        min-width: 100px;
+    }
+}
