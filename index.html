@@ -15,36 +15,41 @@
 </head>
 <body>
     <!-- Navigation -->
-    <nav class="navbar">
-        <div class="nav-container">
-            <div class="nav-logo">
+    <nav class="floating-navbar">
+        <div class="floating-nav-container">
+            <div class="floating-nav-logo">
                 <a href="index.html" class="logo">
                     <i class="fas fa-brain"></i>
                     <span>StudyFocus</span>
                 </a>
             </div>
-            <div class="nav-menu" id="navMenu">
-                <a href="index.html" class="nav-link active">Beranda</a>
-                <a href="dashboard.html" class="nav-link">Dashboard</a>
-                <a href="pomodoro.html" class="nav-link">Pomodoro</a>
-                <a href="todo.html" class="nav-link">To-Do List</a>
-                <a href="calendar.html" class="nav-link">Kalender</a>
-                <a href="flashcards.html" class="nav-link">Flashcards</a>
-                <a href="stats.html" class="nav-link">Statistik</a>
-                <a href="focus.html" class="nav-link">Mode Fokus</a>
-                <div class="nav-user" id="navUser">
-                    <a href="login.html" class="btn btn-outline btn-small" id="loginBtn">Masuk</a>
-                    <a href="register.html" class="btn btn-primary btn-small" id="registerBtn">Daftar</a>
-                </div>
+            <div class="floating-nav-menu" id="floatingNavMenu">
+                <a href="index.html" class="floating-nav-link">
+                    <i class="fas fa-home"></i>
+                    <span>Beranda</span>
+                </a>
+                <a href="dashboard.html" class="floating-nav-link">
+                    <i class="fas fa-chart-pie"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="pomodoro.html" class="floating-nav-link">
+                    <i class="fas fa-clock"></i>
+                    <span>Pomodoro</span>
+                </a>
+                <a href="todo.html" class="floating-nav-link">
+                    <i class="fas fa-tasks"></i>
+                    <span>To-Do</span>
+                </a>
+                <a href="stats.html" class="floating-nav-link active">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Statistik</span>
+                </a>
             </div>
-            <div class="nav-actions">
-                <button id="fullscreenToggle" class="theme-btn" title="Mode Layar Penuh">
-                    <i class="fas fa-expand"></i>
-                </button>
-                <button id="themeToggle" class="theme-btn">
+            <div class="floating-nav-actions">
+                <button id="floatingThemeToggle" class="floating-theme-btn" title="Ubah Tema">
                     <i class="fas fa-moon"></i>
                 </button>
-                <button class="nav-toggle" id="navToggle">
+                <button class="floating-nav-toggle" id="floatingNavToggle">
                     <span></span>
                     <span></span>
                     <span></span>

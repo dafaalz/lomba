@@ -9,27 +9,42 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-    <!-- Navigation -->
-    <nav class="navbar">
-        <div class="nav-container">
-            <div class="nav-logo">
+    <!-- Floating Navigation Bar -->
+    <nav class="floating-navbar">
+        <div class="floating-nav-container">
+            <div class="floating-nav-logo">
                 <a href="index.html" class="logo">
                     <i class="fas fa-brain"></i>
                     <span>StudyFocus</span>
                 </a>
             </div>
-            <div class="nav-menu" id="navMenu">
-                <a href="index.html" class="nav-link">Beranda</a>
-                <a href="dashboard.html" class="nav-link">Dashboard</a>
-                <a href="pomodoro.html" class="nav-link">Pomodoro</a>
-                <a href="todo.html" class="nav-link">To-Do List</a>
-                <a href="stats.html" class="nav-link active">Statistik</a>
+            <div class="floating-nav-menu" id="floatingNavMenu">
+                <a href="index.html" class="floating-nav-link">
+                    <i class="fas fa-home"></i>
+                    <span>Beranda</span>
+                </a>
+                <a href="dashboard.html" class="floating-nav-link">
+                    <i class="fas fa-chart-pie"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="pomodoro.html" class="floating-nav-link">
+                    <i class="fas fa-clock"></i>
+                    <span>Pomodoro</span>
+                </a>
+                <a href="todo.html" class="floating-nav-link">
+                    <i class="fas fa-tasks"></i>
+                    <span>To-Do</span>
+                </a>
+                <a href="stats.html" class="floating-nav-link active">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Statistik</span>
+                </a>
             </div>
-            <div class="nav-actions">
-                <button id="themeToggle" class="theme-btn">
+            <div class="floating-nav-actions">
+                <button id="floatingThemeToggle" class="floating-theme-btn" title="Ubah Tema">
                     <i class="fas fa-moon"></i>
                 </button>
-                <button class="nav-toggle" id="navToggle">
+                <button class="floating-nav-toggle" id="floatingNavToggle">
                     <span></span>
                     <span></span>
                     <span></span>
@@ -39,87 +54,287 @@
     </nav>
 
     <main class="stats-page">
+        <!-- Background Gradient Circles -->
+        <div class="stats-background">
+            <div class="gradient-circle circle-1"></div>
+            <div class="gradient-circle circle-2"></div>
+            <div class="gradient-circle circle-3"></div>
+        </div>
+
         <div class="container">
-            <div class="page-header">
-                <h1>Statistik Belajar</h1>
-                <p>Pantau progress dan produktivitas belajar Anda</p>
+            <!-- Header dengan gaya hero section -->
+            <div class="stats-header">
+                <div class="badge">
+                    <span>📊 Analisis Mendalam</span>
+                </div>
+                <h1 class="stats-title">
+                    Statistik <span class="gradient-text">Belajar</span> Anda
+                </h1>
+                <p class="stats-description">
+                    Analisis mendalam tentang produktivitas dan kebiasaan belajar Anda untuk meningkatkan efisiensi.
+                </p>
             </div>
 
-            <div class="stats-grid-full">
-                <div class="stat-card">
-                    <div class="stat-icon">
+            <!-- Grid Statistik Utama -->
+            <div class="stats-grid-revamped">
+                <div class="feature-card stat-card-revamped">
+                    <div class="feature-icon">
                         <i class="fas fa-clock"></i>
                     </div>
                     <div class="stat-info">
-                        <h3>Sesi Hari Ini</h3>
-                        <div class="stat-value" id="todaySessions">0</div>
+                        <h3>Total Sesi</h3>
+                        <div class="stat-value" id="totalSessions">24</div>
+                        <span class="stat-change positive">+5 dari minggu lalu</span>
                     </div>
                 </div>
-                <div class="stat-card">
-                    <div class="stat-icon">
+                <div class="feature-card stat-card-revamped">
+                    <div class="feature-icon">
                         <i class="fas fa-hourglass-half"></i>
                     </div>
                     <div class="stat-info">
-                        <h3>Menit Fokus Hari Ini</h3>
-                        <div class="stat-value" id="todayMinutes">0</div>
+                        <h3>Menit Fokus</h3>
+                        <div class="stat-value" id="totalMinutes">600</div>
+                        <span class="stat-change positive">+120 menit</span>
                     </div>
                 </div>
-                <div class="stat-card">
-                    <div class="stat-icon">
+                <div class="feature-card stat-card-revamped">
+                    <div class="feature-icon">
                         <i class="fas fa-tasks"></i>
                     </div>
                     <div class="stat-info">
                         <h3>Tugas Selesai</h3>
-                        <div class="stat-value" id="completedTasks">0</div>
+                        <div class="stat-value" id="completedTasks">18</div>
+                        <span class="stat-change positive">90% selesai</span>
                     </div>
                 </div>
-                <div class="stat-card">
-                    <div class="stat-icon">
-                        <i class="fas fa-bullseye"></i>
+                <div class="feature-card stat-card-revamped">
+                    <div class="feature-icon">
+                        <i class="fas fa-fire"></i>
                     </div>
                     <div class="stat-info">
-                        <h3>Progress Harian</h3>
-                        <div class="progress-container">
-                            <div class="progress-bar">
-                                <div class="progress-fill" id="progressFill"></div>
+                        <h3>Streak Aktif</h3>
+                        <div class="stat-value" id="activeStreak">7</div>
+                        <span class="stat-change">hari berturut-turut</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Grafik dan Visualisasi -->
+            <div class="stats-visualization">
+                <div class="feature-card chart-card">
+                    <div class="section-header">
+                        <h3><i class="fas fa-chart-bar"></i> Aktivitas Belajar 7 Hari Terakhir</h3>
+                        <div class="chart-period">
+                            <button class="period-btn active" data-period="week">Minggu</button>
+                            <button class="period-btn" data-period="month">Bulan</button>
+                        </div>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="activityChart" width="400" height="200"></canvas>
+                    </div>
+                </div>
+
+                <div class="chart-sidebar">
+                    <div class="feature-card distribution-card">
+                        <h3><i class="fas fa-pie-chart"></i> Distribusi Waktu</h3>
+                        <div class="distribution-chart">
+                            <canvas id="timeDistributionChart" width="200" height="200"></canvas>
+                        </div>
+                        <div class="distribution-legend">
+                            <div class="legend-item">
+                                <span class="legend-color" style="background-color: #6C63FF;"></span>
+                                <span>Matematika</span>
+                                <span class="legend-percent">35%</span>
                             </div>
-                            <span class="progress-text" id="progressText">0%</span>
+                            <div class="legend-item">
+                                <span class="legend-color" style="background-color: #FF6584;"></span>
+                                <span>Fisika</span>
+                                <span class="legend-percent">25%</span>
+                            </div>
+                            <div class="legend-item">
+                                <span class="legend-color" style="background-color: #36D1DC;"></span>
+                                <span>Kimia</span>
+                                <span class="legend-percent">20%</span>
+                            </div>
+                            <div class="legend-item">
+                                <span class="legend-color" style="background-color: #4CC9F0;"></span>
+                                <span>Bahasa</span>
+                                <span class="legend-percent">15%</span>
+                            </div>
+                            <div class="legend-item">
+                                <span class="legend-color" style="background-color: #F8961E;"></span>
+                                <span>Lainnya</span>
+                                <span class="legend-percent">5%</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="feature-card productivity-card">
+                        <h3><i class="fas fa-bolt"></i> Tingkat Produktivitas</h3>
+                        <div class="productivity-score">
+                            <div class="score-circle">
+                                <div class="score-value">82%</div>
+                                <div class="score-label">Produktif</div>
+                            </div>
+                        </div>
+                        <div class="productivity-tips">
+                            <div class="tip">
+                                <i class="fas fa-check-circle"></i>
+                                <span>Rata-rata fokus Anda lebih tinggi 15% dari pengguna lain</span>
+                            </div>
+                            <div class="tip">
+                                <i class="fas fa-lightbulb"></i>
+                                <span>Coba sesi pagi untuk hasil lebih baik</span>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="chart-container">
-                <h3>Aktivitas Belajar 7 Hari Terakhir</h3>
-                <div class="chart-placeholder">
-                    Grafik aktivitas belajar akan ditampilkan di sini
+            <!-- Riwayat dan Pencapaian -->
+            <div class="stats-history-section">
+                <div class="feature-card history-card">
+                    <h3><i class="fas fa-history"></i> Riwayat Harian</h3>
+                    <div class="history-list">
+                        <div class="history-item">
+                            <div class="history-date">Hari Ini</div>
+                            <div class="history-stats">
+                                <span class="history-sessions">3 sesi</span>
+                                <span class="history-minutes">75 menit</span>
+                            </div>
+                            <div class="history-progress">
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 60%"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="history-item">
+                            <div class="history-date">Kemarin</div>
+                            <div class="history-stats">
+                                <span class="history-sessions">4 sesi</span>
+                                <span class="history-minutes">100 menit</span>
+                            </div>
+                            <div class="history-progress">
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 80%"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="history-item">
+                            <div class="history-date">2 Hari Lalu</div>
+                            <div class="history-stats">
+                                <span class="history-sessions">2 sesi</span>
+                                <span class="history-minutes">50 menit</span>
+                            </div>
+                            <div class="history-progress">
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 40%"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="history-item">
+                            <div class="history-date">3 Hari Lalu</div>
+                            <div class="history-stats">
+                                <span class="history-sessions">5 sesi</span>
+                                <span class="history-minutes">125 menit</span>
+                            </div>
+                            <div class="history-progress">
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 100%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="feature-card achievements-card">
+                    <h3><i class="fas fa-trophy"></i> Pencapaian</h3>
+                    <div class="achievements-grid">
+                        <div class="achievement-item unlocked">
+                            <div class="achievement-icon">
+                                <i class="fas fa-medal"></i>
+                            </div>
+                            <div class="achievement-info">
+                                <h4>Pemula Produktif</h4>
+                                <p>Selesaikan 5 sesi Pomodoro</p>
+                            </div>
+                            <div class="achievement-badge">Diraih</div>
+                        </div>
+                        <div class="achievement-item unlocked">
+                            <div class="achievement-icon">
+                                <i class="fas fa-fire"></i>
+                            </div>
+                            <div class="achievement-info">
+                                <h4>Streak 3 Hari</h4>
+                                <p>Gunakan app selama 3 hari berturut-turut</p>
+                            </div>
+                            <div class="achievement-badge">Diraih</div>
+                        </div>
+                        <div class="achievement-item">
+                            <div class="achievement-icon">
+                                <i class="fas fa-bolt"></i>
+                            </div>
+                            <div class="achievement-info">
+                                <h4>Ahli Fokus</h4>
+                                <p>Capai 500 menit fokus total</p>
+                            </div>
+                            <div class="achievement-progress">
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 60%"></div>
+                                </div>
+                                <span>60%</span>
+                            </div>
+                        </div>
+                        <div class="achievement-item">
+                            <div class="achievement-icon">
+                                <i class="fas fa-star"></i>
+                            </div>
+                            <div class="achievement-info">
+                                <h4>Konsisten Mingguan</h4>
+                                <p>Gunakan app setiap hari selama 7 hari</p>
+                            </div>
+                            <div class="achievement-progress">
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 85%"></div>
+                                </div>
+                                <span>85%</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <div class="stats-history">
-                <div class="history-card">
-                    <h3>Riwayat Sesi</h3>
-                    <ul class="history-list" id="statsHistory">
-                        <!-- History items will be added here -->
-                    </ul>
-                </div>
-                <div class="history-card">
-                    <h3>Pencapaian</h3>
-                    <div class="achievements">
-                        <div class="achievement">
-                            <i class="fas fa-medal"></i>
-                            <span>Pemula Produktif</span>
-                            <small>Selesaikan 5 sesi Pomodoro</small>
+            <!-- Rekomendasi -->
+            <div class="stats-recommendations">
+                <div class="feature-card recommendations-card">
+                    <h3><i class="fas fa-magic"></i> Rekomendasi untuk Anda</h3>
+                    <div class="recommendations-list">
+                        <div class="recommendation-item">
+                            <div class="recommendation-icon">
+                                <i class="fas fa-clock"></i>
+                            </div>
+                            <div class="recommendation-content">
+                                <h4>Coba Sesi Pagi</h4>
+                                <p>Berdasarkan data, produktivitas Anda lebih tinggi di pagi hari. Coba jadwalkan sesi belajar antara jam 8-10 pagi.</p>
+                            </div>
                         </div>
-                        <div class="achievement">
-                            <i class="fas fa-trophy"></i>
-                            <span>Ahli Fokus</span>
-                            <small>Capai 500 menit fokus</small>
+                        <div class="recommendation-item">
+                            <div class="recommendation-icon">
+                                <i class="fas fa-walking"></i>
+                            </div>
+                            <div class="recommendation-content">
+                                <h4>Istirahat Lebih Panjang</h4>
+                                <p>Setelah 3 sesi berturut-turut, pertimbangkan istirahat panjang 15-20 menit untuk menjaga fokus.</p>
+                            </div>
                         </div>
-                        <div class="achievement">
-                            <i class="fas fa-star"></i>
-                            <span>Konsisten</span>
-                            <small>Gunakan app selama 7 hari berturut-turut</small>
+                        <div class="recommendation-item">
+                            <div class="recommendation-icon">
+                                <i class="fas fa-book"></i>
+                            </div>
+                            <div class="recommendation-content">
+                                <h4>Fokus pada Matematika</h4>
+                                <p>Anda menghabiskan 35% waktu belajar untuk matematika. Pertimbangkan untuk menyeimbangkan dengan mata pelajaran lain.</p>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -127,6 +342,82 @@
         </div>
     </main>
 
+    <!-- Install Prompt -->
+    <div id="installPrompt" class="install-prompt">
+        <div class="install-content">
+            <div class="install-icon">
+                <i class="fas fa-brain"></i>
+            </div>
+            <div class="install-text">
+                <h4>Install StudyFocus</h4>
+                <p>Dapatkan pengalaman seperti aplikasi native</p>
+            </div>
+            <div class="install-actions">
+                <button id="installCancel" class="btn btn-outline">Nanti</button>
+                <button id="installConfirm" class="btn btn-primary">Install</button>
+            </div>
+        </div>
+    </div>
+
     <script src="script.js"></script>
+    <!-- Chart.js untuk visualisasi data -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Inisialisasi grafik aktivitas
+        const activityCtx = document.getElementById('activityChart').getContext('2d');
+        const activityChart = new Chart(activityCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab', 'Min'],
+                datasets: [{
+                    label: 'Menit Fokus',
+                    data: [75, 100, 50, 125, 90, 60, 100],
+                    backgroundColor: 'rgba(108, 99, 255, 0.7)',
+                    borderColor: 'rgba(108, 99, 255, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Menit'
+                        }
+                    }
+                }
+            }
+        });
+
+        // Inisialisasi grafik distribusi waktu
+        const distributionCtx = document.getElementById('timeDistributionChart').getContext('2d');
+        const distributionChart = new Chart(distributionCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Matematika', 'Fisika', 'Kimia', 'Bahasa', 'Lainnya'],
+                datasets: [{
+                    data: [35, 25, 20, 15, 5],
+                    backgroundColor: [
+                        '#6C63FF',
+                        '#FF6584',
+                        '#36D1DC',
+                        '#4CC9F0',
+                        '#F8961E'
+                    ],
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                }
+            }
+        });
+    </script>
 </body>
 </html>

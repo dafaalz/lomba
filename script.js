@@ -790,3 +790,388 @@ document.addEventListener('DOMContentLoaded', () => {
         window.pomodoroTimer = new PomodoroTimer();
     }
 });
+
+// Enhanced To-Do List Functionality
+class EnhancedTodoList {
+    constructor() {
+        this.todos = [];
+        this.currentFilter = 'all';
+        this.editingId = null;
+        this.init();
+    }
+    
+    init() {
+        this.loadTodos();
+        this.setupEventListeners();
+        this.renderTodos();
+        this.updateStats();
+    }
+    
+    setupEventListeners() {
+        // Add todo
+        document.getElementById('addTodo').addEventListener('click', () => this.addTodo());
+        document.getElementById('todoInput').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') this.addTodo();
+        });
+        
+        // Filters
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const filter = e.currentTarget.dataset.filter;
+                this.setFilter(filter);
+            });
+        });
+        
+        // Clear completed
+        document.getElementById('clearCompleted').addEventListener('click', () => this.clearCompleted());
+        
+        // Modal events
+        document.getElementById('saveEdit').addEventListener('click', () => this.saveEdit());
+        document.getElementById('cancelEdit').addEventListener('click', () => this.closeEditModal());
+        
+        // Close modal when clicking outside
+        document.getElementById('editModal').addEventListener('click', (e) => {
+            if (e.target.id === 'editModal') this.closeEditModal();
+        });
+    }
+    
+    addTodo() {
+        const input = document.getElementById('todoInput');
+        const text = input.value.trim();
+        
+        if (text === '') {
+            this.showNotification('Masukkan teks tugas terlebih dahulu!', 'warning');
+            return;
+        }
+        
+        const todo = {
+            id: Date.now(),
+            text: text,
+            completed: false,
+            priority: false,
+            createdAt: new Date().toISOString()
+        };
+        
+        this.todos.push(todo);
+        input.value = '';
+        
+        this.saveTodos();
+        this.renderTodos();
+        this.updateStats();
+        this.showNotification('Tugas berhasil ditambahkan!', 'success');
+    }
+    
+    setFilter(filter) {
+        this.currentFilter = filter;
+        
+        // Update active filter button
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.classList.remove('active');
+            if (btn.dataset.filter === filter) {
+                btn.classList.add('active');
+            }
+        });
+        
+        this.renderTodos();
+    }
+    
+    toggleTodo(id) {
+        const todo = this.todos.find(t => t.id === id);
+        if (todo) {
+            todo.completed = !todo.completed;
+            this.saveTodos();
+            this.renderTodos();
+            this.updateStats();
+        }
+    }
+    
+    togglePriority(id) {
+        const todo = this.todos.find(t => t.id === id);
+        if (todo) {
+            todo.priority = !todo.priority;
+            this.saveTodos();
+            this.renderTodos();
+        }
+    }
+    
+    editTodo(id) {
+        const todo = this.todos.find(t => t.id === id);
+        if (todo) {
+            this.editingId = id;
+            document.getElementById('editTodoInput').value = todo.text;
+            document.getElementById('editModal').classList.add('active');
+        }
+    }
+    
+    saveEdit() {
+        if (this.editingId === null) return;
+        
+        const input = document.getElementById('editTodoInput');
+        const text = input.value.trim();
+        
+        if (text === '') {
+            this.showNotification('Teks tugas tidak boleh kosong!', 'warning');
+            return;
+        }
+        
+        const todo = this.todos.find(t => t.id === this.editingId);
+        if (todo) {
+            todo.text = text;
+            this.saveTodos();
+            this.renderTodos();
+            this.closeEditModal();
+            this.showNotification('Tugas berhasil diperbarui!', 'success');
+        }
+    }
+    
+    closeEditModal() {
+        this.editingId = null;
+        document.getElementById('editModal').classList.remove('active');
+    }
+    
+    deleteTodo(id) {
+        this.todos = this.todos.filter(t => t.id !== id);
+        this.saveTodos();
+        this.renderTodos();
+        this.updateStats();
+        this.showNotification('Tugas berhasil dihapus!', 'success');
+    }
+    
+    clearCompleted() {
+        const completedCount = this.todos.filter(t => t.completed).length;
+        
+        if (completedCount === 0) {
+            this.showNotification('Tidak ada tugas yang selesai untuk dihapus!', 'info');
+            return;
+        }
+        
+        this.todos = this.todos.filter(t => !t.completed);
+        this.saveTodos();
+        this.renderTodos();
+        this.updateStats();
+        this.showNotification(`${completedCount} tugas selesai telah dihapus!`, 'success');
+    }
+    
+    getFilteredTodos() {
+        switch (this.currentFilter) {
+            case 'active':
+                return this.todos.filter(t => !t.completed);
+            case 'completed':
+                return this.todos.filter(t => t.completed);
+            case 'priority':
+                return this.todos.filter(t => t.priority);
+            default:
+                return this.todos;
+        }
+    }
+    
+    renderTodos() {
+        const todoList = document.getElementById('todoList');
+        const filteredTodos = this.getFilteredTodos();
+        
+        if (filteredTodos.length === 0) {
+            let message = '';
+            switch (this.currentFilter) {
+                case 'active':
+                    message = 'Tidak ada tugas aktif. Semua tugas sudah selesai!';
+                    break;
+                case 'completed':
+                    message = 'Belum ada tugas yang selesai. Tetap semangat!';
+                    break;
+                case 'priority':
+                    message = 'Tidak ada tugas berprioritas. Tambahkan prioritas pada tugas penting!';
+                    break;
+                default:
+                    message = 'Belum ada tugas. Tambahkan tugas pertama Anda!';
+            }
+            
+            todoList.innerHTML = `
+                <li class="empty-message">
+                    <i class="fas fa-clipboard-list"></i>
+                    <p>${message}</p>
+                </li>
+            `;
+            return;
+        }
+        
+        todoList.innerHTML = filteredTodos.map(todo => `
+            <li class="todo-item-revamped ${todo.priority ? 'priority' : ''}">
+                <input type="checkbox" class="todo-checkbox-revamped" ${todo.completed ? 'checked' : ''} 
+                    onchange="window.todoApp.toggleTodo(${todo.id})">
+                <span class="todo-text-revamped ${todo.completed ? 'completed' : ''}">${todo.text}</span>
+                <div class="todo-actions-revamped">
+                    <button class="todo-action-btn priority-btn" onclick="window.todoApp.togglePriority(${todo.id})" 
+                        title="${todo.priority ? 'Hapus prioritas' : 'Tandai prioritas'}">
+                        <i class="fas ${todo.priority ? 'fa-star' : 'fa-star'}"></i>
+                    </button>
+                    <button class="todo-action-btn edit" onclick="window.todoApp.editTodo(${todo.id})" title="Edit tugas">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="todo-action-btn delete" onclick="window.todoApp.deleteTodo(${todo.id})" title="Hapus tugas">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+            </li>
+        `).join('');
+    }
+    
+    updateStats() {
+        const totalTasks = this.todos.length;
+        const completedTasks = this.todos.filter(t => t.completed).length;
+        const progress = totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0;
+        
+        document.getElementById('totalTasks').textContent = totalTasks;
+        document.getElementById('completedTasks').textContent = completedTasks;
+        document.getElementById('todoProgressFill').style.width = `${progress}%`;
+        document.getElementById('todoProgressText').textContent = `${progress}%`;
+    }
+    
+    saveTodos() {
+        const todoKey = window.studyFocusApp?.user ? 
+            `studyFocusTodos_${window.studyFocusApp.user.id}` : 'studyFocusTodos';
+        localStorage.setItem(todoKey, JSON.stringify(this.todos));
+    }
+    
+    loadTodos() {
+        const todoKey = window.studyFocusApp?.user ? 
+            `studyFocusTodos_${window.studyFocusApp.user.id}` : 'studyFocusTodos';
+        const savedTodos = localStorage.getItem(todoKey);
+        
+        if (savedTodos) {
+            this.todos = JSON.parse(savedTodos);
+        }
+    }
+    
+    showNotification(message, type = 'success') {
+        if (window.studyFocusApp) {
+            window.studyFocusApp.showNotification(message, type);
+        } else {
+            // Fallback notification
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.innerHTML = `
+                <div class="notification-content">
+                    <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'warning' ? 'exclamation-triangle' : 'info-circle'}"></i>
+                    <p>${message}</p>
+                </div>
+                <button class="notification-close" onclick="this.parentElement.remove()">
+                    <i class="fas fa-times"></i>
+                </button>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                if (notification.parentNode) {
+                    notification.remove();
+                }
+            }, 5000);
+        }
+    }
+}
+
+// Initialize Todo App when page loads
+document.addEventListener('DOMContentLoaded', () => {
+    if (document.querySelector('.todo-page')) {
+        window.todoApp = new EnhancedTodoList();
+    }
+});
+
+// Floating Navbar Functionality
+class FloatingNavbar {
+    constructor() {
+        this.init();
+    }
+    
+    init() {
+        this.setupEventListeners();
+        this.setupNavigation();
+    }
+    
+    setupEventListeners() {
+        // Theme toggle
+        const themeToggle = document.getElementById('floatingThemeToggle');
+        if (themeToggle) {
+            themeToggle.addEventListener('click', () => {
+                this.toggleTheme();
+            });
+        }
+        
+        // Mobile menu toggle
+        const navToggle = document.getElementById('floatingNavToggle');
+        const navMenu = document.getElementById('floatingNavMenu');
+        
+        if (navToggle && navMenu) {
+            navToggle.addEventListener('click', () => {
+                navMenu.classList.toggle('active');
+                navToggle.classList.toggle('active');
+            });
+            
+            // Close mobile menu when clicking on a link
+            document.querySelectorAll('.floating-nav-link').forEach(link => {
+                link.addEventListener('click', () => {
+                    navMenu.classList.remove('active');
+                    navToggle.classList.remove('active');
+                });
+            });
+            
+            // Close mobile menu when clicking outside
+            document.addEventListener('click', (e) => {
+                if (!navToggle.contains(e.target) && !navMenu.contains(e.target)) {
+                    navMenu.classList.remove('active');
+                    navToggle.classList.remove('active');
+                }
+            });
+        }
+    }
+    
+    setupNavigation() {
+        // Highlight current page in navigation
+        const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+        document.querySelectorAll('.floating-nav-link').forEach(link => {
+            const href = link.getAttribute('href');
+            if (href === currentPage) {
+                link.classList.add('active');
+            } else {
+                link.classList.remove('active');
+            }
+        });
+    }
+    
+    toggleTheme() {
+        const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+        const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+        
+        document.documentElement.setAttribute('data-theme', newTheme);
+        localStorage.setItem('studyFocusTheme', newTheme);
+        
+        // Update theme button icon
+        const themeBtn = document.getElementById('floatingThemeToggle');
+        if (themeBtn) {
+            const icon = themeBtn.querySelector('i');
+            if (icon) {
+                icon.className = newTheme === 'light' ? 'fas fa-moon' : 'fas fa-sun';
+            }
+        }
+        
+        // Update main theme toggle if exists
+        const mainThemeBtn = document.getElementById('themeToggle');
+        if (mainThemeBtn) {
+            const mainIcon = mainThemeBtn.querySelector('i');
+            if (mainIcon) {
+                mainIcon.className = newTheme === 'light' ? 'fas fa-moon' : 'fas fa-sun';
+            }
+        }
+    }
+}
+
+// Initialize Floating Navbar when DOM is loaded
+document.addEventListener('DOMContentLoaded', () => {
+    window.floatingNavbar = new FloatingNavbar();
+    
+    // Initialize charts if on stats page
+    if (document.querySelector('.stats-page')) {
+        // Chart initialization code would go here
+        // This is already handled in the stats.html file
+    }
+});
