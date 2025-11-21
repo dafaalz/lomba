@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StudyFocus - Tingkatkan Produktivitas Belajar Anda</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <a href="index.html" class="logo">
+                    <i class="fas fa-brain"></i>
+                    <span>StudyFocus</span>
+                </a>
+            </div>
+            <div class="nav-menu" id="navMenu">
+                <a href="index.html" class="nav-link active">Beranda</a>
+                <a href="dashboard.html" class="nav-link">Dashboard</a>
+                <a href="pomodoro.html" class="nav-link">Pomodoro</a>
+                <a href="todo.html" class="nav-link">To-Do List</a>
+                <a href="stats.html" class="nav-link">Statistik</a>
+            </div>
+            <div class="nav-actions">
+                <button id="themeToggle" class="theme-btn">
+                    <i class="fas fa-moon"></i>
+                </button>
+                <button class="nav-toggle" id="navToggle">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-container">
+            <div class="hero-content">
+                <h1 class="hero-title">
+                    Tingkatkan <span class="gradient-text">Produktivitas</span> Belajar Anda
+                </h1>
+                <p class="hero-description">
+                    StudyFocus membantu Anda belajar lebih efektif dengan teknik Pomodoro, manajemen tugas, dan pelacakan statistik yang komprehensif.
+                </p>
+                <div class="hero-actions">
+                    <a href="dashboard.html" class="btn btn-primary">
+                        <span>Mulai Sekarang</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </a>
+                    <a href="#features" class="btn btn-secondary">
+                        <span>Pelajari Lebih Lanjut</span>
+                    </a>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="floating-card card-1">
+                    <i class="fas fa-clock"></i>
+                    <h3>Pomodoro Timer</h3>
+                    <p>Fokus 25 menit dengan istirahat teratur</p>
+                </div>
+                <div class="floating-card card-2">
+                    <i class="fas fa-tasks"></i>
+                    <h3>To-Do List</h3>
+                    <p>Kelola tugas belajar dengan mudah</p>
+                </div>
+                <div class="floating-card card-3">
+                    <i class="fas fa-chart-line"></i>
+                    <h3>Statistik</h3>
+                    <p>Lacak progress belajar Anda</p>
+                </div>
+            </div>
+        </div>
+        <div class="hero-background">
+            <div class="gradient-circle circle-1"></div>
+            <div class="gradient-circle circle-2"></div>
+            <div class="gradient-circle circle-3"></div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="features">
+        <div class="container">
+            <div class="section-header">
+                <h2>Fitur Unggulan</h2>
+                <p>Alat lengkap untuk mendukung produktivitas belajar Anda</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <h3>Pomodoro Timer</h3>
+                    <p>Teknik manajemen waktu yang terbukti meningkatkan fokus dan efisiensi belajar dengan siklus 25 menit fokus dan 5 menit istirahat.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-tasks"></i>
+                    </div>
+                    <h3>To-Do List</h3>
+                    <p>Kelola daftar tugas belajar Anda dengan fitur tambah, edit, hapus, dan tandai selesai. Semua data tersimpan secara lokal.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-chart-bar"></i>
+                    </div>
+                    <h3>Statistik Belajar</h3>
+                    <p>Pantau progress belajar harian dan mingguan dengan grafik visual dan progress bar yang informatif.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-sticky-note"></i>
+                    </div>
+                    <h3>Catatan Cepat</h3>
+                    <p>Buat catatan belajar singkat yang tersimpan otomatis. Ideal untuk mencatat poin-poin penting saat belajar.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-palette"></i>
+                    </div>
+                    <h3>Mode Gelap/Terang</h3>
+                    <p>Pilih tema yang nyaman untuk mata Anda. Preferensi tema tersimpan otomatis untuk kenyamanan penggunaan.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-mobile-alt"></i>
+                    </div>
+                    <h3>Responsif</h3>
+                    <p>Akses dari perangkat apapun. Website dirancang untuk tampil optimal di desktop, tablet, dan smartphone.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section class="how-it-works">
+        <div class="container">
+            <div class="section-header">
+                <h2>Bagaimana Cara Kerjanya?</h2>
+                <p>Tiga langkah sederhana menuju produktivitas belajar yang lebih baik</p>
+            </div>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <h3>Buat Rencana Belajar</h3>
+                    <p>Gunakan To-Do List untuk merencanakan tugas belajar Anda</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h3>Gunakan Pomodoro Timer</h3>
+                    <p>Atur waktu fokus 25 menit dan istirahat 5 menit untuk efisiensi maksimal</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h3>Pantau Progress</h3>
+                    <p>Lihat statistik belajar Anda dan tingkatkan produktivitas dari waktu ke waktu</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta">
+        <div class="container">
+            <div class="cta-content">
+                <h2>Siap Meningkatkan Produktivitas Belajar Anda?</h2>
+                <p>Mulai perjalanan belajar yang lebih fokus dan terorganisir hari ini</p>
+                <a href="dashboard.html" class="btn btn-primary btn-large">
+                    <span>Coba Sekarang - Gratis!</span>
+                    <i class="fas fa-rocket"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-logo">
+                        <i class="fas fa-brain"></i>
+                        <span>StudyFocus</span>
+                    </div>
+                    <p>Platform produktivitas belajar yang membantu Anda mencapai tujuan akademik dengan lebih efisien dan terorganisir.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h3>Menu</h3>
+                    <ul>
+                        <li><a href="index.html">Beranda</a></li>
+                        <li><a href="dashboard.html">Dashboard</a></li>
+                        <li><a href="pomodoro.html">Pomodoro Timer</a></li>
+                        <li><a href="todo.html">To-Do List</a></li>
+                        <li><a href="stats.html">Statistik</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Fitur</h3>
+                    <ul>
+                        <li><a href="#">Pomodoro Timer</a></li>
+                        <li><a href="#">To-Do List</a></li>
+                        <li><a href="#">Statistik Belajar</a></li>
+                        <li><a href="#">Catatan Cepat</a></li>
+                        <li><a href="#">Mode Gelap</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Kontak</h3>
+                    <ul>
+                        <li><i class="fas fa-envelope"></i> hello@studyfocus.com</li>
+                        <li><i class="fas fa-phone"></i> +62 123 4567 890</li>
+                        <li><i class="fas fa-map-marker-alt"></i> Jakarta, Indonesia</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2023 StudyFocus. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

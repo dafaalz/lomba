@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - StudyFocus</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <a href="index.html" class="logo">
+                    <i class="fas fa-brain"></i>
+                    <span>StudyFocus</span>
+                </a>
+            </div>
+            <div class="nav-menu" id="navMenu">
+                <a href="index.html" class="nav-link">Beranda</a>
+                <a href="dashboard.html" class="nav-link active">Dashboard</a>
+                <a href="pomodoro.html" class="nav-link">Pomodoro</a>
+                <a href="todo.html" class="nav-link">To-Do List</a>
+                <a href="stats.html" class="nav-link">Statistik</a>
+            </div>
+            <div class="nav-actions">
+                <button id="themeToggle" class="theme-btn">
+                    <i class="fas fa-moon"></i>
+                </button>
+                <button class="nav-toggle" id="navToggle">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <main class="dashboard-page">
+        <div class="container">
+            <div class="page-header">
+                <h1>Dashboard</h1>
+                <p>Ringkasan produktivitas belajar Anda hari ini</p>
+            </div>
+
+            <div class="dashboard-grid">
+                <!-- Statistik Cepat -->
+                <section class="dashboard-section quick-stats">
+                    <h2>Statistik Hari Ini</h2>
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-clock"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3>Sesi Pomodoro</h3>
+                                <div class="stat-value" id="todaySessions">0</div>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-hourglass-half"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3>Menit Fokus</h3>
+                                <div class="stat-value" id="todayMinutes">0</div>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-tasks"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3>Tugas Selesai</h3>
+                                <div class="stat-value" id="completedTasks">0</div>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-bullseye"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3>Progress Harian</h3>
+                                <div class="progress-container">
+                                    <div class="progress-bar">
+                                        <div class="progress-fill" id="progressFill"></div>
+                                    </div>
+                                    <span class="progress-text" id="progressText">0%</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Pomodoro Timer Mini -->
+                <section class="dashboard-section pomodoro-mini">
+                    <h2>Pomodoro Timer</h2>
+                    <div class="pomodoro-card mini">
+                        <div class="timer-display">
+                            <div class="timer" id="timer">25:00</div>
+                            <div class="session-counter" id="sessionCounter">Sesi: 0</div>
+                        </div>
+                        <div class="timer-controls">
+                            <button id="startTimer" class="btn btn-primary">Mulai</button>
+                            <button id="pauseTimer" class="btn btn-secondary" disabled>Jeda</button>
+                            <button id="resetTimer" class="btn btn-secondary">Reset</button>
+                        </div>
+                        <div class="timer-modes">
+                            <button class="mode-btn active" data-mode="focus">Fokus</button>
+                            <button class="mode-btn" data-mode="shortBreak">Istirahat Pendek</button>
+                            <button class="mode-btn" data-mode="longBreak">Istirahat Panjang</button>
+                        </div>
+                        <div class="pomodoro-actions">
+                            <a href="pomodoro.html" class="btn btn-outline">Buka Timer Lengkap</a>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- To-Do List Mini -->
+                <section class="dashboard-section todo-mini">
+                    <div class="section-header">
+                        <h2>To-Do List</h2>
+                        <a href="todo.html" class="btn-link">Lihat Semua</a>
+                    </div>
+                    <div class="todo-card mini">
+                        <div class="todo-input">
+                            <input type="text" id="todoInput" placeholder="Tambah tugas belajar...">
+                            <button id="addTodo" class="btn btn-primary">Tambah</button>
+                        </div>
+                        <ul class="todo-list" id="todoList">
+                            <!-- To-do items akan ditambahkan di sini -->
+                        </ul>
+                    </div>
+                </section>
+
+                <!-- Catatan Cepat -->
+                <section class="dashboard-section quick-notes">
+                    <h2>Catatan Cepat</h2>
+                    <div class="notes-card">
+                        <textarea id="quickNotes" placeholder="Tulis catatan belajar di sini..."></textarea>
+                        <div class="notes-info">Catatan tersimpan otomatis</div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal Edit Todo -->
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <h3>Edit Tugas</h3>
+            <input type="text" id="editTodoInput">
+            <div class="modal-actions">
+                <button id="saveEdit" class="btn btn-primary">Simpan</button>
+                <button id="cancelEdit" class="btn btn-secondary">Batal</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
